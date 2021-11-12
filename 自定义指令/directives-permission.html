@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script src="../vue/vue.js"></script>
+<body>
+    <div id="app">
+      <span v-permission="'1'">{{name}}</span>
+    </div>
+</body>
+<script>
+    const app = new Vue({
+        el: '#app',
+        directives: {
+            permission: {
+                inserted: function (el, binding) {
+                    console.log('binding', binding);
+                let permission = binding.value // 获取到 v-permission的值
+                const checkArray = function(key) {
+                let arr = ['1', '2', '3', '4']
+                let index = arr.indexOf(key)
+                if (index > -1) {
+                return true // 有权限
+                } else {
+                return false // 无权限
+                }
+               }
+  
+                if (permission) {
+                    let hasPermission = checkArray(permission)
+                    if (!hasPermission) {
+                    // 没有权限 移除Dom元素
+                    el.parentNode && el.parentNode.removeChild(el)
+                    }
+                  }
+                },
+            }
+        },
+        data() {
+            return {
+                name: '11111111111111111'
+            }
+        },
+        methods: {
+        }
+    })
+</script>
+</html>

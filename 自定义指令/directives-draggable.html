@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<script src="../vue/vue.js"></script>
+<style>
+    .drag-box {
+        position: relative;
+        width: 1000px;
+        height: 1000px;
+    }
+    .drag-div {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100px;
+        height: 100px;
+        background: pink;
+    }
+</style>
+<body>
+    <div id="app">
+        <div class="drag-box">
+            <div v-draggable class="drag-div">{{name}}</div>
+        </div>
+    </div>
+</body>
+<script>
+      const app = new Vue({
+          el: '#app',
+          directives: {
+               draggable: {
+                inserted: function(el) {
+                el.style.cursor = 'move'
+                el.onmousedown = function (e) {
+                    console.log(e);
+                    let disx = e.pageX - el.offsetLeft
+                    let disy = e.pageY - el.offsetTop
+                    document.onmousemove = function (e) {
+                        let x = e.pageX - disx
+                        let y = e.pageY - disy
+
+
+                        let maxX = document.body.clientWidth - ~~(window.getComputedStyle(el).width)
+                        let maxY = document.body.clientHeight - ~~(window.getComputedStyle(el).height)
+                        if (x < 0) {
+                        x = 0
+                        } else if (x > maxX) {
+                        x = maxX
+                        }
+                        if (y < 0) {
+                        y = 0
+                        } else if (y > maxY) {
+                        y = maxY
+                        }
+                        el.style.left = x + 'px'
+                        el.style.top = y + 'px'
+                    }
+                    document.onmouseup = function () {
+                        document.onmousemove = document.onmouseup = null
+                     }
+                   }
+               }
+            }
+          },
+          data(){
+            return {
+                name: '1111111'
+            }
+          } 
+      })
+</script>
+</html>

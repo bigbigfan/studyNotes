@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    #box {
+    width: 100px;
+    height: 100px;
+    background: black
+}
+</style>
+<body>
+   <div id="box">
+      box
+   </div>
+</body>
+<script> 
+   new Promise( resolve => resolve())
+        .then(() => {  // p1
+          console.log('第一轮循环最后一个微任务');
+       });
+    
+    setTimeout(() => { // st1
+       console.log('st1，第二轮循环宏任务从此开始');
+       (function() {
+            const box = document.querySelector('#box')
+            box.style.width = '300px'
+        })()
+        // setTimeout(() => { // st-pro
+        //    console.log('st-pro');
+        // }, 100)
+                   
+        new Promise(resolve => resolve())
+            .then(() => { //st1-p
+                console.log('第二轮循环微最后一个微任务');
+            })
+    }, 0)
+    setTimeout(() => { // st2
+        alert('UI rendering')
+        console.log('st2,第三轮循环宏任务从此开启');
+    }, 100)
+    
+    // console: '第一轮循环最后一个微任务', 'st1，第二轮循环宏任务从此开始', '第二轮循环微最后一个微任务', 'st2,第三轮循环宏任务从此开启'
+
+    // task: 
+
+    // microtask:  p1
+
+    //------------------模拟执行-------------------
+    
+    // 第一轮循环 microtask : [p1] -> 清空[]
+    
+    // 宏任务队列情况 task: [st1, st2]
+
+    // 第二轮循环  宏任务队列中 st1执行 -> microtask [st1-p]  假如说UI 是一个宏任务 那么在本轮循环中应当追加到宏任务队列中 
+
+    // 即此时的宏任务队列情况 task: [st2, UI]
+
+    // 清空第二轮循环的微任务队列 microtask [st1-p] -> []
+
+    // 第三轮循环 宏任务队列中st2执行 打印 'st2,第三轮循环宏任务从此开启'
+
+    // 第四轮循环 UI 改变盒子宽度 这里就意味着 UI rendering 如果是宏任务 ，应当在'st2,第三轮循环宏任务从此开启'打印之后，使得盒子宽度发生变化
+
+    // 但事实观察，在st2中添加alert('UI rendering')阻塞，控制台打印到'第二轮循环微最后一个微任务'时戛然而止 此时盒子的宽度已经发生改变，说明 UI rendering已经先执行过了，UI rendering至少不应该是一个宏任务
+
+    // 进一步证明 ，把修改盒子宽度的自调用函数改成 一个宏任务st-pro 执行打印st-pro，按照宏任务的执行逻辑 该值显然应该最后打印  ，进一步说明UI rendering 至少不应该是一个宏任务，其不具备宏任务行为
+
+
+</script>
+</html>
