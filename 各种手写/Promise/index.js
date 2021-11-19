@@ -1,192 +1,235 @@
-// （1） 
-// p1 p2 都是Promise的实例，但是p2的resolve方法将p1作为参数
-// 即一个异步操作的结果是返回另一个异步操作
-
-// 这里p2设置的是1秒返回p1，但是由于p1设置的是3秒返回fail，那么在
-// p1返回error之前p2的状态都取决于p1也就是pending
-// 并且此时.then之后的语句都针对p1
-// const p1 = new Promise(function (resolve, reject) {
-//     setTimeout(() => reject(new Error('fail')), 3000)
-//   })
-  
-//   const p2 = new Promise(function (resolve, reject) {
-//     setTimeout(() => resolve(p1), 1000)
-//   })
-  
-//   p2
-//     .then(result => console.log(result))
-//     .catch(error => console.log(error))
-//   // Error: fail
-
-
-// （2）
-// 调用resolve或reject并不会终结Promise的参数函数的执行
-//  new Promise((resolve, reject) => {
-//      resolve(1)
-//      console.log(2);
-//  }).then(r => {
-//      console.log(r);
-//  })
-
-
-// （3）
-// Promise.prototype.then()
-// Promise实例具有then方法，即then方法是定义在原型对象Promise.prototype上的
-// 他的作用是为Promise实例添加状态改变时的回调函数
-//前文说then方法的第一个参数是resolved的回调函数,第二个是rejected的回调,他们都是可选的
-//then方法返回的是一个新的Promise实例（不是原来的那个Promise）因此可以采用链式写法,即then后面再接另一个then方法。这样也可以解决回调地狱的问题.
-
-
-
-// （4）
-// Promise.prototype.catch()
-//Promise.prototype.catch()方法是.then(null, rejection)或.then(undefined, rejection)的别名，用于指定发生错误时的回调函数
-
-
-// const promise = new Promise((resolve, reject) => {
-//     // throw new Error('test');
-//     resolve('promise')
-//   });
-
-  // promise
-  // .then(
-  //   // Promise.resolve('bar') 
-  //   res => {
-  //     console.log('hahhaha'); // 即使我这个函数没有处理res 后面的then也接受不到'promise' 
-  //   }
-  // ) // 值穿透问题，then期待的参数是函数 非函数会发生穿透
-  // .then(res => {
-  //     console.log(res);
-  // })
-  // .catch((error) => {
-  //   console.log(error);
-  // });
-
-// const promise = new Promise((resolve, reject) => {
-//     //  resolve('ok')  // 如果promise的状态已经resolved了，那么后续抛出错误也是没有意义的,这也是promise的基本性质
-//      throw new Error('test')
-//     //  reject(new Error('test'))
+// const p1 = new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//         resolve('result')
+//     }, 1000)
 // })
 
-// promise
+// p1
+// .then(res => console.log('then!!!' ,res))
+// .catch(err => console.log('err!!!' ,err))
+
+// 大概描述
+//  Promise 的构造方法接受一个executor() 在new Promise() 时就立刻执行这个executor回调
+// execuror()内部的异步任务被放入宏/微任务队列，等待执行
+// then() 被执行，收集成功/失败回调，放入对应的队列
+// executor() 的异步任务被执行，触发resolve/reject 从成功/失败队列中取出回调依次执行
+
+
+// then收集依赖 -> 异步触发resolve -> resolve执行依赖 
+
+// ===================超低配版=========================
+// class MyPromise {
+//     // 构造方法接受一个回调
+//     constructor(executor) {
+//         this._resolveQueue = []  // then收集的执行成功的队列
+//         this._rejectQueue = []   // the收集的执行失败的队列
+//      // 由于resolve/reject是在executor内部被调用，因此需要使用箭头函数固定
+//      let _resolve = (val) => {
+//         // 从成功队列里取出回调依次执行
+//         while(this._resolveQueue.length) {
+//           const callback = this._resolveQueue.shift()
+//           callback(val)
+//         }
+//      } 
+//      //reject
+//      let _reject = (val) => {
+//          while(this._rejectQueue.length) {
+//              const callback = this._rejectQueue.shift()
+//              callback(val)
+//          }
+//      }
+     
+//      // new Promise() 时立即执行executor 并传入resolve和reject
+//      executor(_resolve, _reject)
+//     }
+
+//     // then方法，接受一个成功的回调和一个失败的回调，并push进对应队列
+//     then(resolveFn, rejectFn) {
+//         this._resolveQueue.push(resolveFn)
+//         this._rejectQueue.push(rejectFn)
+//     }
+// }
+
+
+// // 实验一下
+// const p1 = new MyPromise((resolve, reject) => {
+//     setTimeout(() => {
+//         resolve('result')
+//     }, 1000)
+// })
+
+// p1
 // .then(res => {
-//    console.log(res);
-// }).catch(err => {
-//    console.log(err);
+//     console.log(res);
 // })
 
 
-//（4）
-// 通常不要去定义reject函数（then的第二个函数）而是用catch去捕获错误，ctach具有冒泡性质，任何一个then抛出错误都会被最后的catch捕获（个人认为一个then写满两个函数读起来跟地狱没区别）
+// ========================== Promise A+规范=============================
+// 核心的两条规则
+// 1，Promise本质是一个状态机，且只有三种状态 Pending（等待） Fulfilled（执行）Reject（拒绝）状态的变更是单向的，意味着状态一旦发生改变就不能再被修改
+// 2，then方法，接受两个可选参数，分别对应resolve和reject时候触发的回调。then方法返回一个promise。then方法可以被同一个promise调用多次
 
+// ==========================补充一下Promise代码-状态改变=============================
 
-// const someAsyncThing = function() {
-//   return new Promise((resolve, reject) => {
-//     // 下面一行会报错，因为x没有声明
-//     resolve(x + 2);
-//   });
-// };
+// Promise/A+ 规范的三种状态
+const PENDING = 'pending'
+const FULFILLED = 'fulfilled'
+const REJECTED = 'rejected'
 
-// someAsyncThing().then(() => {
-//   console.log('everything is great');
-// });
-// setTimeout(() => { console.log(123) }, 2000); // 如果没有catch报错，在2s之后还是会输出123，而不是停止脚本运行
-// 即promise内部的错误不会影响到外部的代码
+class MyPromise {
+   // 构造方法接受一个回调
+   constructor(executor) {
+       this._status = PENDING // Promise 状态
+       this._resolveQueue = [] // 成功队列，resolve触发
+       this._rejectQueue = [] // 失败队列，reject触发
+     // 由于resolve/reject 是在executor内部被调用，因此需要使用箭头函数固定this指向，否则找不到this._resolveQueue  
+       let _resolve = (val) => {
+          if(this._status !== PENDING) return // 对应规范中的"状态只能由pending到fulfilled或rejected
+          this._status = FULFILLED // 变更状态
+         
 
+          // 这里之所以用一个队列储存回调，是为了实现规范要求的then方法可以被同一个Promise调用多次
+          // 如果使用一个变量而非队列来储存回调，那么及时多次p1.then()也只会执行一次回调
+          
+            while(this._resolveQueue.length) {
+                const callback = this._resolveQueue.shift() // 队列是先进先出的和排队打饭一样
+                callback(val)
+            }
+       }
+       //实现reject
+       let _reject = (val) => {
+           if(this._status !== PENDING) return // // 对应规范中的"状态只能由pending到fulfilled或
+           this._status = REJECTED // 变更状态
+          
+           while(this._rejectQueue.length) {
+               const callback = this._rejectQueue.shift() 
+               callback(val)
+           }
+        }  
+       //  new Promise()时立即执行executor 并传入resolve和reject
+        executor(_resolve, _reject)    
+    }
+   
+    // then方法，接受一个成功的回调和一个失败的回调
+    then(resolveFn, rejectFn) {
+        // return 一个新的promise
+        return new MyPromise((resolve, reject) => {
+         // 把resolveFn 重新包装一下，再push进resolve执行队列，这是为了能够获取回调的返回值进行分类讨论
+            const fulfilledFn = value => {
+               try {
+            //   执行第一个（当前的）Promise的成功回调，并获取返回值
+               let x = resolveFn(value)
+            //  分类讨论返回值，如果是Promise那么等待Promise状态变更 否则直接resolve
+            // 这里resolve 之后，就能被下一个.then()的回调获取到返回值，从而实现链式调用
+               x instanceof MyPromise ? x.then(resolve, reject) : resolve(x)
+              } catch(error) {
+                 reject(error)
+              }
+            }
+        //   把后续then收集的依赖都push进当前Promise的成功回调队列中 为了保证顺序调用
+           this._resolveQueue.push(fulfilledFn)
+         
+           // reject    
+          const rejectedFn = error => {
+              try {
+                  let x = rejectFn(error)
+                  x instanceof MyPromise ? x.then(resolve, reject) : resolve(x)
+              } catch(error) {
+                  reject(error)
+              }
+            }
+            this._rejectQueue.push(rejectedFn)
+        })
+    }
+}
 
-
-// （5） promise内部的错误没有被catch，因为错误抛出是在下一轮事件循环，then的内容在上一轮微任务就已经结束了，错误会冒泡到外层成为未捕获的错误
-// const promise = new Promise(function (resolve, reject) {
-//   resolve('ok');
-//   setTimeout(function () { throw new Error('test') }, 0)
-// });
-// promise.then(function (value) { console.log(value) });
-
-//
-// const someAsyncThing = () => {
-//   return new Promise((resolve, reject) => {
-//     // 下面一行会报错，因为x没有声明
-//     resolve(x + 2);
-//   });
-// };
-
-// someAsyncThing().then(() => {
-//   return someOtherAsyncThing();
-// }).catch((error) => {
-//   console.log('oh no', error);
-//   // 下面一行会报错，因为 y 没有声明
-//   y + 2;
-// }).then(() => {
-//   console.log('carry on');
-// });
-
-
-//------------------------------------ api ----------------------------------------
-//(1)
-// Promise.prototype.finally()
-
-//finally 的实现方法 明确finally实际是一个特殊的then 实现方法如下
-// Promise.prototype.myFinally = function (callback) {
-//   let P = this.constructor;
-//   return this.then(
-//     value  => P.resolve(callback()).then(() => value),
-//     reason => P.resolve(callback()).then(() => { throw reason })
-//   );
-// };
-
-
-// const p = new Promise((resolve, reject) => {
-//   resolve('promise')
+//  ==================== then 的链式调用 ===========================
+// 接着实现链式调用 (重点和难点)
+// const p1 = new Promise((resolve, reject) => {
+//     resolve(1)
 // })
 
-// p.then(res => {
-//   console.log(res);
-//   throw new Error('oh error')
+// p1
+// .then(res => {
+//     console.log(res);
+//     //  then回调中可以return 一个Promise
+//     return new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             resolve(2)
+//         }, 1000);
+//     })
 // })
-// .catch((err) => {
-//   console.log(err);
+// .then(res => {
+//     console.log(res);
+//     // then回调中也可以return一个值
+//     return 3
 // })
-// .myFinally(() => {
-//   console.log('finally');
-// })
-
-
-//(2)
-// Promise.all()
-// 生成一个Promise对象的数组
-// const promises = [100, 3, 50, 7, 11, 13].map((id) => {
-//   const item = new Promise((resolve, reject)=> {
-//      setTimeout(() => resolve(id +'s'),  id * 100)
-//   })
-//   return item
+// .then(res => {
+//     console.log(res);
 // })
 
+// 输出结果 1 2 3
 
-// Promise.all(promises).then((posts) => {
-//   console.log(posts);
-// }).catch((err) => {
-//   console.log(err);
-// });
+// 思考一下如何实现这种链式调用：
+// 1， 显然.then()需要返回一个Promise 这样才能找到then方法，所以我们会把then方法的返回值包装成Promise
+// 2， .then()的回调需要拿到上一个.then()的返回值
+// 3，.then() 的回调需要顺序执行，以上面这段代码为例子 虽然中间return了一个Promise 但执行顺序也要保证是1 -> 2 -> 3我们要等待当前Promise状态变更后 再执行下一个then收集的回调，这就要求我们对then的返回值分类讨论
 
 
+// then方法:
 
-const promise1 = new Promise((resolve, reject) => {
-   resolve('promise1')
+//  then(resolveFn, rejectFn) {
+//     // return 一个新的promise
+//     return new MyPromise((resolve, reject) => {
+//      // 把resolveFn 重新包装一下，再push进resolve执行队列，这是为了能够获取回调的返回值进行分类讨论
+//         const fulfilledFn = value => {
+//            try {
+//         //   执行第一个（当前的）Promise的成功回调，并获取返回值
+//            let x = resolveFn(value)
+//         //  分类讨论返回值，如果是Promise那么等待Promise状态变更 否则直接resolve
+//         // 这里resolve 之后，就能被下一个.then()的回调获取到返回值，从而实现链式调用
+//            x instanceof MyPromise ? x.then(resolve, reject) : resolve(x)
+//           } catch(error) {
+//              reject(error)
+//           }
+//         }
+//     //   把后续then收集的依赖都push进当前Promise的成功回调队列中 为了保证顺序调用
+//        this._resolveQueue.push(fulfilledFn)
+     
+//        // reject    
+//       const rejectedFn = error => {
+//           try {
+//               let x = rejectFn(error)
+//               x instanceof MyPromise ? x.then(resolve, reject) : resolve(x)
+//           } catch(error) {
+//               reject(error)
+//           }
+//         }
+//         this._rejectQueue.push(rejectedFn)
+//     })
+// }
+
+const p1 = new MyPromise((resolve, reject) => {
+    setTimeout(() => {
+    resolve(1) 
+    }, 500);
 })
-.then(res => res)
-.catch(e => e)
 
-const promise2 = new Promise((resolve, reject) => {
-   throw new Error('promise2')
+p1
+.then(res => {
+    console.log(res)
+    return 2
 })
-.then(res => res)
-.catch(e => e)
+.then(res => {
+    console.log(res)
+    return 3
+})
+.then(res => {
+    console.log(res);
+})
 
 
-Promise.all([promise1, promise2])
-.then(res => console.log(res))
-.catch(e => console.log('err!!!',e))
-
+// 输出 1 2 3
 
 
 
