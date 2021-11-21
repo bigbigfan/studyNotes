@@ -112,5 +112,10 @@
 // 我们知道了new 了之后，创建出来的对象的__proto__ 都被js默认设置指向到其构造函数的prototype
 
 
+ const x = val => {
+     console.log('hahahahahah', val);
+ }
 
+ typeof x === 'function'?  console.log('bushi') : null 
 
+console.log(x);
