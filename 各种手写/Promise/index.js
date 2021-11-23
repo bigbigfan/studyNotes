@@ -22,7 +22,7 @@
 //     // 构造方法接受一个回调
 //     constructor(executor) {
 //         this._resolveQueue = []  // then收集的执行成功的队列
-//         this._rejectQueue = []   // the收集的执行失败的队列
+//         this._rejectQueue = []   // then收集的执行失败的队列
 //      // 由于resolve/reject是在executor内部被调用，因此需要使用箭头函数固定
 //      let _resolve = (val) => {
 //         // 从成功队列里取出回调依次执行
