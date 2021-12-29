@@ -45,28 +45,117 @@
 // --------------------- 判断函数
 
 
-let class2type = {}
+// let class2type = {}
 
-// 生成class2type映射
-"Boolean Number String Function Array Date RegExp Object Error Null Undefined".split(" ").map((item, index) => {
-    class2type[`[object ${item}]`] = item.toLowerCase()
+// // 生成class2type映射
+// "Boolean Number String Function Array Date RegExp Object Error Null Undefined".split(" ").map((item, index) => {
+//     class2type[`[object ${item}]`] = item.toLowerCase()
+// })
+
+
+// function type(obj) {
+//     return typeof obj === "object" || typeof obj === 'function' ?
+//     class2type[Object.prototype.toString.call(obj)] || "object" : typeof obj
+// }
+
+// // 可以直接利用type函数封装一个判断
+// function isString(arg) {
+//     return type(arg) === 'string'  
+// }
+
+// console.log(isString(1));
+
+// function Dog(name, sex) {
+//     this.name = name
+//     this.sex = sex
+// }
+// function Dog(name, sex) {
+//     this.name = name
+//     this.sex = sex
+// }
+
+// Dog.prototype.toString = function dogToString() {
+//     var ret = "Dog " + this.name + " is " + this.sex ;
+//     return ret;
+// }
+
+// var theDog = new Dog('lkj', 'female')
+
+// console.log(theDog.toString());
+
+
+
+// ---------aaaaaa
+
+// async function async1() {
+//     console.log('async1');
+//     await async2()
+//     console.log('commit 触发修改mutations');
+// }
+
+// async function async2() {
+//   Promise.resolve().then(() => {
+//       console.log('接口数据返回'); //p-then
+//   })
+// }
+
+
+
+// async1()
+// // .then(() => {
+// //     console.log('init');
+// // })
+
+// console.log('init');
+
+
+//  async1  
+//  [p-then, 'commit']
+//  init
+// []  ->  p-then 
+// async1 p-then 接口数据返回 commit 触发修改mutations
+
+
+//  -------bbbbb
+
+
+async function async1() {
+    console.log('async1');
+    await async2()
+   //commit是同步的，但是在这作为一个微任务
+   console.log('commit 触发修改mutations');
+}
+
+async function async2() {
+  Promise.resolve().then(() => {
+      console.log('接口数据返回'); //p-then
+  })
+}
+
+
+
+new Promise(resolve => {
+    async1()
+    resolve()
 })
-
-
-function type(obj) {
-    return typeof obj === "object" || typeof obj === 'function' ?
-    class2type[Object.prototype.toString.call(obj)] || "object" : typeof obj
-}
-
-// 可以直接利用type函数封装一个判断
-function isString(arg) {
-    return type(arg) === 'string'  
-}
-
-console.log(isString(1));
+// .then(() => {
+//     console.log('init');
+// })
 
 
 
 
 
 
+// console.log('init'); //1
+
+// setTimeout(() => {
+//     console.log('init');
+// }, 0); // 2
+
+// Promise.resolve().then(() => {
+//     console.log('init');
+// }) //solve-1
+// setTimeout(() => {
+//       console.log('init');
+// }, 0); // solve-2

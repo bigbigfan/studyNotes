@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+  .box {
+    height: 100vh;
+    width: 200px;
+    background-color: black;
+    overflow: scroll;
+  }
+  .inner {
+    height: 2000px;
+    width: 100%;
+    background-color: green;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+ 
+</style>
+<body>
+  <div class="box">
+    <div class="inner">
+      <div>top</div>
+      <div>bottom</div>
+    </div>
+  </div>
+</body>
+<script>
+  // 防抖
+   /*
+* fn [function] 需要防抖的函数
+* delay [number] 毫秒，防抖期限值
+*/
+   function debounce ( fn, delay) {
+    let timer = null // 闭包
+    return function () {  
+        clearTimeout(timer)  // 进入该分支语句，说明当前正在一个计时过程, 清除后重新计时
+      timer = setTimeout(fn, delay)
+    }
+  }
+  
+  // // 节流
+  // function throttle (fn , delay) {
+  //   let valid = true // 状态
+  //   return function () {
+  //     if(!valid) {
+  //        // 休眠
+  //        return false
+  //     } 
+  //     // 工作期间设为无效
+  //     valid = false 
+  //     setTimeout(() => {
+  //       fn()
+  //       valid = true
+  //     }, delay)
+  //   }
+  // }
+
+
+  // 监听滚动位置
+    function showPosition() {
+      console.log('滚动条位置：' , document.querySelector('.box').scrollTop)
+    }
+   
+    document.querySelector('.box').onscroll = debounce(showPosition, 500)
+
+   
+  
+
+</script>
+</html>
