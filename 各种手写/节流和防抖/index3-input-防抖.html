@@ -13,6 +13,7 @@
             // 防抖
             function debounce (fn, delay) {
               let timer = null
+              console.log('zhixing');
               return function (args) {
                 let _this = this
                 let _args = args 
@@ -22,8 +23,12 @@
                 }, delay)
               }
             }
+          
+            // 获取事件DOM
             let inputDebounce = document.getElementById('debounce')
-            let debounceAjax = debounce(ajax, 300)
+            //  执行一次debounce让防抖函数吐出闭包函数
+            let debounceAjax = debounce(ajax, 300) 
+           
             inputDebounce.addEventListener('keyup', function(e) {
               debounceAjax(e.target.value)
             })

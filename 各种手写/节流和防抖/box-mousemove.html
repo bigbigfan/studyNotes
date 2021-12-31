@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>box</title>
+</head>
+<style>
+.box {
+    height: 200px;
+    width: 200px;
+    background-color: pink;
+}
+</style>
+<body>
+    <div class="box"></div>
+</body>
+<script>
+    // 在盒子内展示当前offsetX
+  function showPosition (e) { 
+    //  console.log('position', e.clientX);
+    console.log('this',this);
+     this.innerHTML = e.offsetX
+  }  
+  
+ //  防抖
+  function debounce(fn, delay = 300) {
+      let timer 
+      return function (args)  {
+        clearTimeout(timer)
+        timer = setTimeout(() => {
+            fn.call(this,args)
+        }, delay);
+      }
+  }     
+
+  const box = document.querySelector('.box')
+  box.onmousemove =  debounce(showPosition)
+</script>
+</html>
