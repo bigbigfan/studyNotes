@@ -47,26 +47,38 @@
     //   };
     // }
     // 时间戳法节流
-   function throttle2(fn, delay) {
-    //  初始化时间戳
-      let previous = Date.now()
-      let isFirst = true
-      return (...args) => {
-           if(isFirst) {
-             fn(...args)
-             isFirst = false
-           }
-          const now = Date.now() 
-          //  如果现在的时间戳-先前的时间戳的差比 delay时间大就执行函数
-          //  且重置时间戳
-          if(now - previous >= delay) {
-              fn(...args)
-              previous = Date.now()
-          }
-      }  
+    // function throttle2(fn, delay) {
+    //   //  初始化时间戳
+    //   let previous = Date.now();
+    //   let isFirst = true;
+    //   return (...args) => {
+    //     if (isFirst) {
+    //       fn(...args);
+    //       isFirst = false;
+    //     }
+    //     const now = Date.now();
+    //     //  如果现在的时间戳-先前的时间戳的差比 delay时间大就执行函数
+    //     //  且重置时间戳
+    //     if (now - previous >= delay) {
+    //       fn(...args);
+    //       previous = Date.now();
+    //     }
+    //   };
+    // }
 
-   }
+    function throttle1(fn, delay) {
+      let timer 
+      return (...args) => {
+         if(!timer) {
+           timer = setTimeout(() => {
+            timer = null
+            fn(...args)
+           }, delay);
+         }
+      }
+    }
+
     
-    window.onmousemove = throttle2(showPosition, 1000);
+    window.onmousemove = throttle1(showPosition, 1000);
   </script>
 </html>
