@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<style>
+  #app {
+    width: 200px;
+    height: 200px;
+    background-color: pink;
+  }
+</style>
+<body>
+  <div id="app"></div>
+</body>
+<script>
+  let oDiv = document.getElementById('app')
+  function changeNum(e){
+  console.log(this);
+    this.innerHTML = e.offsetX
+  }
+  // 防抖
+  // function debounce(fn, delay = 200) {
+  //   let timer;
+  //   return function() {
+  //    clearTimeout(timer) // 这里不用timer = null 的原因是该表达式只是给timer改变了指向为null 定时器任然存在内存未清除，所以最后依然会随着事件触发开启一系列的定时器，不能防抖 
+  //     timer = setTimeout(() => {
+  //       fn.apply(this, arguments)
+  //     }, delay);
+  //   }
+  // }
+  // 节流
+  // 时间戳版本
+  // function throttle1(fn, delay = 500) {
+  //   let previous = Date.now();
+  //   return function () {
+  //     let now = Date.now()
+  //     if(now - previous > delay) {
+  //       fn.apply(this, arguments)
+  //       previous = now
+  //     } 
+  //   }
+  // }
+  // 定时器版本
+  // function throttle2(fn, delay = 500) {
+  //   let timer
+  //   return function () {
+  //     if(!timer) {
+  //       timer = setTimeout(() => {
+  //         timer = null  
+  //         // // 这里不用clearTimeout(timer)是因为会清除定时器，但其实定时器return出来的是一个数字记号，clear之后他的记录还是存在的，所以之后不会再进入该if判断，事件也就只会执行一次
+  //         fn.apply(this, arguments)
+  //       }, delay);
+  //     }
+  //   }
+  // }
+
+  function throttle3(fn, delay = 500) {
+  let timer;
+  let isFirst = true;
+  return function() {
+    if (isFirst) {
+      fn.call(this, ...arguments)
+      isFirst = false
+    }
+    if (!timer) {
+      timer = setTimeout(() => {
+        timer = null;
+        fn.call(this,...arguments);
+      }, delay)
+    }
+  }
+}
+  oDiv.onmousemove = throttle3(changeNum)
+</script>
+</html>
