@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>freeze</title>
+  </head>
+  <body></body>
+  <script>
+    // 声明一个普通对象
+    const obj = {
+      a: 1,
+      b: {
+        c: 2,
+      },
+    };
+    // 普通冻结
+    // const fobj = Object.freeze(obj);
+
+    // fobj.b.c = 3
+    // console.log(fobj.b.c); //3 --> 被改变了
+    // 显然，如果obj的属性是引用类型 那么freeze无法保证数据内容是不变的
+
+    // 利用递归完全冻结一个对象
+
+    var constantize = (obj) => {
+      Object.freeze(obj);
+      Object.keys(obj).forEach((key, i) => {
+        if (typeof obj[key] === "object") {
+          constantize(obj[key]);
+        }
+      });
+      return obj;
+    };
+
+    //  const x = constantize(obj)
+    //  console.log(x);  // {a: 1, b: {c: 2}}
+    //  x.b.c = 100
+    //  console.log(x); // {a: 1, b: {c: 2}} 属性b为引用类型，但未被修改
+
+    //  那么怎么实现一个freeze？ 用Object.defineProperty --- 属性描述符定义writable是false 和 Object.seal() ---禁止添加新属性
+    function myFreeze(obj) {
+      if (obj instanceof Object) {
+        Object.seal(obj);
+        for (let i in obj) {
+          if (obj.hasOwnProperty(i)) {
+            Object.defineProperty(obj, i, {
+              writable: false,
+            });
+          }
+        }
+      }
+    }
+
+    const obj1 = { x: 1 };
+    myFreeze(obj1);
+    console.log(obj1); //  {x : 1}
+    obj1.x = 2; // 修改原有属性
+    obj1.c = 3; // 添加新属性
+    console.log(obj1); //  {x : 1} 修改无效
+  </script>
+</html>
