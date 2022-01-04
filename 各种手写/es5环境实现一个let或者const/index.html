@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    // 由于es5不存在block概念 无法完全实现const 只能是挂到某个对象下，要么是全局的window要么就是自定义一个object当容器
+
+    var __const = function __const(data, value) {
+      window.data = value; // 把要定义的data挂载到window下，并赋值value
+      Object.defineProperty(window, data, {
+        // 利用Object.defineProperty的能力劫持当前对象，并修改其属性描述符
+        enumerable: false,
+        configurable: false,
+        get: function () {
+          return value;
+        },
+        set: function (data) {
+          //  const 对于引用类型其实是可以修改其具体内容的，因为const只是保证了指向该引用类型的地址不变，无法保证引用类型内容不变
+          //  所以通过区分两个值不同 和原类型非引用类型来判断是否可以修改值
+          if (value !== data || typeof value !== "object") {
+            throw new TypeError("Assignment to constant variable.");
+          } 
+          return data
+        },
+      });
+    };
+    __const("a", [1, 2 , 3]);
+    console.log(a);
+    a[0] = 3
+    console.log(a);
+
+    // const a = [1,2,3]
+    // console.log(a);
+    // a[0] = 3
+    // console.log(a);
+  </script>
+</html>
