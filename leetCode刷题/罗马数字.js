@@ -24,4 +24,4 @@ var romanToInt = function (s) {
   return ans
 }
 
-console.log(romanToInt('IV'))
+console.log(romanToInt('IX'))
