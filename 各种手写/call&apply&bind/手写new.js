@@ -47,13 +47,15 @@ function OtakuObject (name, age) {
   }
 }
 OtakuObject.prototype.strength = 60
-
+OtakuObject.prototype.sayYourName = function () { // 原型上加方法
+  console.log(`I am ${this.name}`);
+}
 // const person = new OtakuObject('Kevin', '18') // 显然看到下面的结果，person实例只能访问到返回对象上的属性
 // console.log(person.name);//  Kevin
 // console.log(person.age);//  18
 // console.log(person.habbit);//  reading
 // console.log(person.strength);//  undefined
-
+// person.sayYourName() // ERROR
 
 // 看原生的new效果： 当如果对于一个有返回值的构造函数 且返回值只是基本类型  
 function OtakuBase (name, age) {
@@ -62,13 +64,15 @@ function OtakuBase (name, age) {
   return 'wzf is handsome'
 }
 OtakuBase.prototype.strength = 60
-
-// const person = new OtakuBase('Kevin', '18')  // 返回的基本类型被无视了，会访问实例上继承构造函数的属性
-// console.log(person.name);//  undefined
-// console.log(person.age);//  18
-// console.log(person.habbit);//  Games
-// console.log(person.strength);//  60
-
+OtakuBase.prototype.sayYourName = function () { // 原型上加方法
+  console.log(`I am ${this.name}`);
+}
+const person = new OtakuBase('Kevin', '18')  // 返回的基本类型被无视了，会访问实例上继承构造函数的属性
+console.log(person.name);//  undefined
+console.log(person.age);//  18
+console.log(person.habbit);//  Games
+console.log(person.strength);//  60
+person.sayYourName() // I am undefined
 // ==========================第二版手写=================================
 
 function myNewPro(ctor, ...args) {
@@ -86,8 +90,8 @@ function myNewPro(ctor, ...args) {
 // console.log(person1.habbit);//  reading
 // console.log(person1.strength);//  undefined
 
-const person2 = myNewPro(OtakuBase,'Kevin', '18')  // 返回的基本类型被无视了，会访问实例上继承构造函数的属性
-console.log(person2.name);//  undefined
-console.log(person2.age);//  18
-console.log(person2.habbit);//  Games
-console.log(person2.strength);//  60
+// const person2 = myNewPro(OtakuBase,'Kevin', '18')  // 返回的基本类型被无视了，会访问实例上继承构造函数的属性
+// console.log(person2.name);//  undefined
+// console.log(person2.age);//  18
+// console.log(person2.habbit);//  Games
+// console.log(person2.strength);//  60
