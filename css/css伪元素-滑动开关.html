@@ -22,7 +22,6 @@
     width: 100px;
     height: 30px;
     background-color: palevioletred;
-    border-radius: 25px;
     border: 1px solid red;
     /* 调整位置为了遮盖checkbox原生的样式 */
     margin-left: -12px;
@@ -34,20 +33,15 @@
     width: 28px;
     height: 28px;
     background-color: #fff;
-    border-radius: 25px;
     border: 1px solid yellow;
     /* 调整滑块的起始位置 */
     margin-top: -31px;
     margin-left: -11px;
-    /* 添加动画 */
+    /* 添加渐变 */
     transition: margin 0.2s ease-in 0.2s; 
   }
   .slider:checked::after {
     margin-left: 59px;
-    border-color: green;
-  }
-  .slider:hover::after {
-     cursor: pointer;
   }
   /* 伪元素属于主元素的一部分，因此点击伪元素触发的是主元素的click事件 所以这里用checkbox是最好的，点击视图内必定勾选 */
 </style>

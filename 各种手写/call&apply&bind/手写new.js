@@ -67,28 +67,28 @@ OtakuBase.prototype.strength = 60
 OtakuBase.prototype.sayYourName = function () { // 原型上加方法
   console.log(`I am ${this.name}`);
 }
-const person = new OtakuBase('Kevin', '18')  // 返回的基本类型被无视了，会访问实例上继承构造函数的属性
-console.log(person.name);//  undefined
-console.log(person.age);//  18
-console.log(person.habbit);//  Games
-console.log(person.strength);//  60
-person.sayYourName() // I am undefined
+// const person = new OtakuBase('Kevin', '18')  // 返回的基本类型被无视了，会访问实例上继承构造函数的属性
+// console.log(person.name);//  undefined
+// console.log(person.age);//  18
+// console.log(person.habbit);//  Games
+// console.log(person.strength);//  60
+// person.sayYourName() // I am undefined
 // ==========================第二版手写=================================
 
 function myNewPro(ctor, ...args) {
   const constructor = ctor
   let obj = Object.create(constructor.prototype)
-  const temp = constructor.call(obj, ...args)
+  const temp = constructor.call(obj, ...args)//改变this指向
    // 1,如果构造函数会返回一个对象那我们最后就返回这个对象，如果不是就返回新创建的obj  2, 由于null也是对象 原生new返回null其实也是不管的，需要兼容一下
   return typeof temp === 'object'? temp || obj : obj  
 }
 
 
-// const person1 = myNewPro(OtakuObject, 'Kevin', '18')
-// console.log(person1.name);//  Kevin
-// console.log(person1.age);//  18
-// console.log(person1.habbit);//  reading
-// console.log(person1.strength);//  undefined
+const person1 = myNewPro(OtakuObject, 'Kevin', '18')
+console.log(person1.name);//  Kevin
+console.log(person1.age);//  18
+console.log(person1.habbit);//  reading
+console.log(person1.strength);//  undefined
 
 // const person2 = myNewPro(OtakuBase,'Kevin', '18')  // 返回的基本类型被无视了，会访问实例上继承构造函数的属性
 // console.log(person2.name);//  undefined

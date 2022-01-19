@@ -33,9 +33,8 @@ const obj = {
 function Log(name = "", profession = "") {
   return `${name} - ${profession} - ${this.a}`;
 }
-console.log('before', obj);
-console.log(Log.myCall(obj, 'wzf', 'front'));
-console.log('after', obj);
+
+// console.log(Log.myCall(obj, 'wzf', 'front'));
 // console.log(Log.myApply(obj, ["wzf", "front"]));
 
 // ================手写bind================
@@ -78,11 +77,22 @@ function bar(name, age) {
 
 bar.prototype.friend = "kevin"; // 原型上加东西了 bind之后也要保证可以访问得到 所以手写里加入了维护原型
 
-let bindFoo = bar.myBind(foo, "disy");
+let bindFoo = bar.myBind(foo, "disy"); // 作为构造函数调用
 
-// var bindObj = new bindFoo('18') // bind后的函数可以作为一个构造函数调用 尽管在全局都声明了value但是 this.value -> undefined  this此时丢失了
+let bindObj = new bindFoo(12)
+
+console.log(bindObj.friend); // 维护了原型，这样构造函数生成的实例可以访问原型上的属性
+
+
 
 // bindFoo.prototype.friend = '3'
-// console.log(bar.prototype.friend); // 原型上的属性friend被找到了。说明this绑定的对象是bar构造函数
+
+
+
+
+
+
+
+
 
 // bind 的性质是这样的 bind之后的函数如果作为了一个构造函数 被new调用 那么this是保留的 如果是普通的函数调用那么就用bind的对象的上下文

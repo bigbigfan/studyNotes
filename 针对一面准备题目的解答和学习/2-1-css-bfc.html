@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    /* 解决margin重叠问题 开启不同的bfc */
+    .box2 {
+      width: 100px;
+      height: 100px;
+      background-color: red;
+      margin-bottom: 10px;
+    }
+    .box3 {
+      margin-top: 10px;
+      width: 100px;
+      height: 100px;
+      background-color: black;
+      /* 开启bfc */
+      /* float: left; */
+      /* position: fixed; */
+      display: inline-block;
+    }
+  </style>
+  <body>
+    <div class="box2"></div>
+
+    <div class="box3"></div>
+  </body>
+</html>
