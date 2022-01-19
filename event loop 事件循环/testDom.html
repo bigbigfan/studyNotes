@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <span>12312312321</span>
+  </body>
+  <script>
+    setTimeout(() => {
+      const x = Date.now();
+      console.log(x);
+    }, 1000);
+
+    // 一，浏览器是多进程的
+
+    // 主进程 ： 协调创建销毁其他子进程
+    // 第三方插件进程
+    // GPU 进程：用于3D绘制
+    // 渲染进程 浏览器内核(最重要)：页面渲染 脚本执行 事件处理等
+
+    // 二, 渲染进程包含了多个线程
+    // 1， JS引擎线程 负责处理解析和执行js脚本程序 只有一个JS引擎线程（单线程）且与GUI渲染线程互斥 防止渲染结果不可预期
+    // 2, GUI渲染线程 负责渲染页面 布局和绘制 页面需要重绘和回流时 该线程就会执行
+    // 3，http请求线程 浏览器有一个单独的线程用于处理AJAX请求
+    // 4,事件处理线程 控制事件循环
+    // 5，定时器触发线程
+
+
+    // 1,callstack 栈清空同步任务
+    // 2，遇到微任务和宏任务会分别放进对应的队列
+    // 3，清空当前轮次事件循环的微任务
+    // 4，插入UI渲染
+    // 5，开启下一轮事件循环宏任务
+  </script>
+</html>
