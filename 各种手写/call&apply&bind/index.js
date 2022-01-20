@@ -50,10 +50,8 @@ Function.prototype.myBind = function (context = global, ...args) {
   const Fn = function () {
     //  bind后的函数副本执行的时候也可以传入参数
     // 根据调用方式 传入不同绑定值
-    return fn.apply(this instanceof Fn ? this : context, [
-      ...args,
-      ...arguments,
-    ]);
+    const binArgs =  [...args,...arguments]
+    return fn.apply(this instanceof Fn ? this : context, binArgs);
   };
   Fn.prototype = Object.create(fn.prototype); // 维护原型
   return Fn;

@@ -77,7 +77,7 @@ OtakuBase.prototype.sayYourName = function () { // 原型上加方法
 
 function myNewPro(ctor, ...args) {
   const constructor = ctor
-  let obj = Object.create(constructor.prototype)
+  let obj = Object.create(constructor.prototype)//让实例对象可以访问构造函数原型 (constructor.prototype) 所在原型链上的属性
   const temp = constructor.call(obj, ...args)//改变this指向
    // 1,如果构造函数会返回一个对象那我们最后就返回这个对象，如果不是就返回新创建的obj  2, 由于null也是对象 原生new返回null其实也是不管的，需要兼容一下
   return typeof temp === 'object'? temp || obj : obj  
@@ -95,3 +95,36 @@ console.log(person1.strength);//  undefined
 // console.log(person2.age);//  18
 // console.log(person2.habbit);//  Games
 // console.log(person2.strength);//  60
+
+
+
+
+
+
+
+
+// ==========================第三版手写=================================
+//  还可以考虑下构造函数return function行为 也只需要一行代码 
+
+function aNew(ctor, ...args) {
+    const constructor = ctor
+
+    const instance = Object.create(constructor.prototype)
+
+    const temp = constructor.call(instance, ...args)
+   
+    return  temp !== null && (typeof temp == 'function' || typeof temp == 'object') ? temp : instance
+}
+
+function person(name, age) {
+   this.name = name
+   this.age = age
+}
+person.prototype.friend = 'txj'
+
+
+const personWzf = aNew(person, 'wzf', 25)
+// const personWzf = new person('wzf', 25)
+
+console.log(personWzf, personWzf.friend);
+

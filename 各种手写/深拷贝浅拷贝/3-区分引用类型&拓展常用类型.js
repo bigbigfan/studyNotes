@@ -1,18 +1,42 @@
+
+// tag分类
+const mapTag = "[object Map]"
+const setTag = "[object Set]"
 // 主程序
 function deepClone(target, map = new Map()) {
-  if (!isObject(target)) {
-    return target;
+  // 不是引用类型直接返回
+  if (!isObject(target)) return target;
+  // 处理引用类型
+  let type = getType(target) // 获取类型
+  console.log(type === mapTag);
+  let cloneTarget // 声明克隆后对象
+  if(!canTraverse[type]) {
+    return // 不能遍历的直接返回 
   } else {
-    let cloneTarget = Array.isArray(target) ? [] : {};
-    if (map.has(target)) {
-      return map.get(target);
-    }
-    map.set(target, cloneTarget);
-    for (let key in target) {
-      cloneTarget[key] = deepClone(target[key], map);
-    }
-    return cloneTarget;
+    // cloneTarget = Object.create(target.constructor.prototype) // 看似和下面一样实际会导致map的set方法属性丢失报错
+    const Ctor = target.constructor;
+    cloneTarget = new Ctor();
   }
+
+  // 处理循环引用
+  if (map.has(target)) {
+    return map.get(target);
+  }
+  map.set(target, cloneTarget);
+
+  if(type === mapTag) { // 拷贝Map类型
+    target.forEach((i, key) => {
+      cloneTarget.set(key, deepClone(i, map))
+    })
+  } 
+
+  // 数组或者对象
+  // let cloneTarget = Array.isArray(target) ? [] : {};
+  
+  for (let key in target) {
+    cloneTarget[key] = deepClone(target[key], map);
+  }
+  return cloneTarget;
 }
 
 // 判断引用类型  排除function 和 null
@@ -22,24 +46,37 @@ function isObject(value) {
   return value !== null && (type === "object" || type === "function");
 }
 function getType(value) {
-  return Object.prototype.toString.call(value)
+  return Object.prototype.toString.call(value);
 }
 
+// 提供类型
 
-// const x = {
-//   a: 1,
-//   b: {
-//     name: 'wzf'
-//   }
-// }
+const canTraverse = {
+  "[object Map]": true,
+  "[object Set]": true,
+  "[object Array]": true,
+  "[object Object]": true,
+  "[object Arguments]": true,
+};
 
-// const res = deepClone(x)
-// res.b.name = 'txj'
 
-// console.log(res, x);
+const myMap = new Map([[1, 'hahha']])
+console.log(myMap);
+const x = {
+  a: 1,
+  b: {
+    name: 'wzf'
+  },
+  c: myMap
+}
 
-const y = null;
+const res = deepClone(x)
 
-const res = deepClone(y);
 
-console.log(res, y);
+console.log(res.c);
+
+
+
+const map1 = new Map([['a', 1], ['b', 2], ['c', 3]])
+
+
