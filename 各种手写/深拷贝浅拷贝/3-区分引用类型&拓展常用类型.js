@@ -8,9 +8,9 @@ function deepClone(target, map = new Map()) {
   if (!isObject(target)) return target;
   // 处理引用类型
   let type = getType(target) // 获取类型
-  console.log(type === mapTag);
   let cloneTarget // 声明克隆后对象
   if(!canTraverse[type]) {
+    console.log('不能遍历');
     return // 不能遍历的直接返回 
   } else {
     // cloneTarget = Object.create(target.constructor.prototype) // 看似和下面一样实际会导致map的set方法属性丢失报错
@@ -31,8 +31,6 @@ function deepClone(target, map = new Map()) {
   } 
 
   // 数组或者对象
-  // let cloneTarget = Array.isArray(target) ? [] : {};
-  
   for (let key in target) {
     cloneTarget[key] = deepClone(target[key], map);
   }
@@ -60,23 +58,30 @@ const canTraverse = {
 };
 
 
-const myMap = new Map([[1, 'hahha']])
-console.log(myMap);
-const x = {
-  a: 1,
-  b: {
-    name: 'wzf'
-  },
-  c: myMap
+// const myMap = new Map([[1, 'hahha']])
+// console.log(myMap);
+// const x = {
+//   a: 1,
+//   b: {
+//     name: 'wzf'
+//   },
+//   c: myMap
+// }
+
+
+// const res = deepClone(x)
+
+
+
+const x1 = {
+  a:1,
+  b:2,
+  c: {
+    d: 999
+  }
 }
 
-const res = deepClone(x)
+const x2 = deepClone(x1)
 
-
-console.log(res.c);
-
-
-
-const map1 = new Map([['a', 1], ['b', 2], ['c', 3]])
-
+console.log(x2);
 
