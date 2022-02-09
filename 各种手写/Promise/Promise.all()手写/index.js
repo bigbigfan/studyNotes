@@ -24,9 +24,7 @@
 // }
 
 
-
-
-
+// 第二遍
 function promiseAll1(promises) {
   return new Promise((resolve, reject) => {
     if(!Array.isArray(promises)) {
@@ -36,7 +34,7 @@ function promiseAll1(promises) {
     let promiseCounter = 0
     let promisesRes = []
     for(let i = 0; i<l; i++) {
-      return Promise.resolve(promises[i]).then(value => {
+       Promise.resolve(promises[i]).then(value => {
         promiseCounter++
         promisesRes[i] = value
         if(promiseCounter == l) {
@@ -47,6 +45,48 @@ function promiseAll1(promises) {
   })
 }
 
+// Promise.all 第三遍
+
+function promiseAll3(promises) {
+   return new Promise((resolve, reject) => {
+     if(!Array.isArray(promises)) {
+       throw new TypeError('arguments is not Array!')
+     }
+     const l = promises.length
+     let counter = 0
+     let resResults = []
+     for(let i = 0; i < l; i++) {
+       Promise.resolve(promises[i]).then(res => {
+          resResults[i] = res 
+          counter++
+          if(counter === l) {
+            return resolve(resResults)
+          } // 触顶阻断
+       }, err => reject(err))
+     }
+   })
+}
+
+
+
+
+
+
+
+function aPromise(value) {
+  return new Promise(resolve => resolve(value))
+}
+function rej() {
+  return new Promise((resolve, reject) => reject('haha reject!!!!!!'))
+} 
+
+const pArr = [aPromise(1), aPromise(2), aPromise(3)]
+
+promiseAll3(pArr).then(res => console.log(res)).catch(err => console.log(err))
+
+
+
+// 用map写的例子，不可行   这里的问题是return 不能跳出map循环
 
 // function promiseAll2(promises) {
 //   return new Promise((resolve, reject) => {
@@ -66,7 +106,7 @@ function promiseAll1(promises) {
 //     //   }, error => reject(error))
 //     // }
 //     promises.map((item, index) => {
-//       return Promise.resolve(item).then(value => {
+//        Promise.resolve(item).then(value => {
 //         promisesRes[index] = value
 //       }, error => reject(error))
 //     })
@@ -75,13 +115,3 @@ function promiseAll1(promises) {
 
 //   //这里的问题是return 不能跳出map循环
 // }
-
-
-function aPromise(value) {
-  return new Promise(resolve => resolve(value))
-}
-const rej = new Promise((resolve, reject) => reject('haha reject!!!!!!'))
-
-const pArr = [aPromise(1), aPromise(2), aPromise(3),rej]
-
-promiseAll1(pArr).then(res => console.log(res)).catch(err => console.log(err))
