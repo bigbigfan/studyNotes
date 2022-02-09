@@ -148,3 +148,5 @@ const x1 = {
 
 const x2 = deepClone2(x1)
 console.log(x2);
+
+

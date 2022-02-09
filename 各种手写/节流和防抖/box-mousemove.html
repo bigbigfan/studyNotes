@@ -19,7 +19,6 @@
   <script>
     let oDiv = document.getElementById("app");
     function changeNum(e) {
-      console.log(this);
       this.innerHTML = e.offsetX;
     }
     // 防抖
@@ -32,18 +31,19 @@
     //     }, delay);
     //   }
     // }
+
     // 节流
     // 时间戳版本
-    function throttle1(fn, delay = 1000) {
-      let previous = 0;
-      return function () {
-        let now = Date.now()
-        if(now - previous >= delay) {
-          fn.apply(this, arguments)
-          previous = now
-        }
-      }
-    }
+    // function throttle1(fn, delay = 1000) {
+    //   let previous = 0;
+    //   return function () {
+    //     let now = Date.now()
+    //     if(now - previous >= delay) {
+    //       fn.apply(this, arguments)
+    //       previous = now
+    //     }
+    //   }
+    // }
     // 定时器版本
     // function throttle2(fn, delay = 500) {
     //   let timer
@@ -74,6 +74,36 @@
     //     }
     //   };
     // }
-    oDiv.onmousemove = throttle1(changeNum);
+
+   // 时间戳
+  function throttle1 (fn, delay = 1000) {
+    let pre = Date.now()
+   return function() {
+     let now = Date.now()
+     if(now - pre >= delay) {
+        fn.apply(this, arguments)   
+        pre = now
+     }
+   }
+  }
+
+  function throttle2 (fn, delay = 1000) {
+    let timer
+    return function () {
+      if(!timer) {
+        timer = setTimeout(() => {
+          fn.apply(this, arguments)
+          timer = null 
+      }, delay);
+      }
+    }
+  }
+
+
+
+
+
+
+    oDiv.onmousemove = throttle2(changeNum);
   </script>
 </html>
