@@ -32,19 +32,19 @@
 // 遍历顺序有可能不是实际数组内部顺序
 // 使用for in会遍历数组所有的可枚举属性包括原型 可以使用hasOwnProperty()筛选实例属性
 
-// const obj1 = {
-//     a: '1',
-//     b: [1,2,3],
-//     c: {
-//         d: '2'
-//     }
-// }
+const obj1 = {
+    a: '1',
+    b: [1,2,3],
+    c: {
+        d: '2'
+    }
+}
 
-// Object.prototype.e = 'pro_to'
+Object.prototype.e = 'pro_to'
 
-// // for (let i in obj1 ) {
-// //     console.log(i);
-// // } // a b c e
+for (let i in obj1 ) {
+    console.log(i);
+} // a b c e
 
 // for (let i in obj1) {
 //     if(obj1.hasOwnProperty(i)) {

@@ -175,10 +175,14 @@ function rej() {
   return new Promise((resolve, reject) => reject('haha reject!!!!!!'))
 } 
 
-const pArr = [aPromise(3), aPromise(2), aPromise(1)]
+const pArr = [aPromise(3), aPromise(2), aPromise(1),rej()]
 
 
-promiseAllSettled(pArr)
+Promise.prototype.catch = function (onError) {
+  return this.then(null, onError)
+}
+
+promiseAll3(pArr)
 .then(res => console.log(res))
 .catch(err => console.log(err))
 

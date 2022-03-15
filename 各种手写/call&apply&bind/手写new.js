@@ -106,9 +106,7 @@ console.log(person1.strength);//  undefined
 // ==========================第三版手写=================================
 //  还可以考虑下构造函数return function行为 也只需要一行代码 
 
-function aNew(ctor, ...args) {
-    const constructor = ctor
-
+function aNew(constructor, ...args) {
     const instance = Object.create(constructor.prototype)
 
     const temp = constructor.call(instance, ...args)
@@ -128,3 +126,194 @@ const personWzf = aNew(person, 'wzf', 25)
 
 console.log(personWzf, personWzf.friend);
 
+
+
+
+//  ========= 手写写着玩
+
+function myNew(Fn, ...args) {
+   const instance = Object.create(Fn.prototype)
+   const temp = Fn.call(instance, ...args)
+   return temp !== null && (typeof temp === 'object' || typeof temp === 
+   'function') ? temp : instance
+}
+
+function Person(name) {
+  this.name = name
+}
+
+const p1 = new Person('wzf')
+const p2 = myNew(Person, 'wzf')
+console.log(p1, p2);
+
+
+
+
+  
+ Function.prototype.myCall = function (context, ...args) {
+  if(typeof this !== 'function') {
+    throw new TypeError('arguments must be function')
+  }
+  const key = Symbol()
+  context[key] = this
+  const result = context[key](...args)  
+  delete context[key]
+  return result
+}
+
+Function.prototype.myApply = function (context, args) {
+  if(typeof this !== 'function') {
+    throw new TypeError('arguments must be function')
+  }
+  const key = Symbol()
+  context[key] = this
+  const result = context[key](...args)  
+  delete context[key]
+  return result
+}
+
+Function.prototype.myBind = function (context, ...args) {
+  if(typeof this !== 'function') {
+    throw new TypeError('arguments must be function')
+  }
+  const fn = this // this指向当前的调用者
+  function Fn() {
+    const bindArgs = [...args, ...arguments]
+    const reslut = fn.apply(this instanceof Fn? this : fn, bindArgs)
+  }
+  Fn.prototype = Object.create(fn.prototype)
+  return Fn
+}
+
+
+const obj1 = {
+  name: 'wzf'
+}
+
+const obj2 = {
+  name: 'txj',
+  say: function(age, height) {
+     console.log(this.name + age + height);   
+  }
+}
+
+const bindFn = obj2.say.myBind(obj1,26, 178)
+bindFn()
+
+
+
+Promise.prototype.promiseAll = function(promises) {
+  return new Promise((resolve, reject) => {
+    if(!Array.isArray(promises)) {
+      throw new TypeError('arguments must be Array')
+    } 
+    const l = promises.length
+    const resResults = []
+    let counter = 0
+    promises.forEach((item , index) => {
+      Promise.resolve(item)
+      .then(res => {
+        resResults[index] = res
+        counter++
+        if(l === counter) {
+          return resolve(resResults)
+        }
+      }, err => reject(err))
+    })
+  })
+}
+
+function p(time) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve('我的' + time)
+    }, time)
+  })
+}
+const pp1 = p(100)  
+const pp2 = p(200)
+const pp3 = p(300)
+const arr = [pp1, pp2, pp3]
+Promise.prototype.promiseAll([...arr, Promise.reject('erroraaa')])
+.then(res => console.log(res))
+.catch(err => console.log(err))
+
+
+
+
+
+
+
+Function.prototype.myCall = function(context, ...args) {
+    const key = Symbol()
+    context[key] = this
+    const res = context[key](...args)
+    delete context[key]
+    return res
+}
+Function.prototype.myApply = function(context, args) {
+    const key = Symbol()
+    context[key] = this
+    const res = context[key](...args)
+    delete context[key]
+    return res
+}
+
+const A = {
+  name: 'wzf from A'
+}
+
+const B = {
+  name: 'txj from B',
+  sayName: function(arg1, arg2) {
+    console.log(this.name + arg1 + arg2);
+  }
+}
+
+B.sayName.myCall(A, 'must', 'fine')
+B.sayName.myApply(A, ['must1', 'fine1'])
+
+
+
+Function.prototype.myBind = function(context, ...args) {
+  const fn = this
+  function Fn() {
+    const bindArgs = [...args, ...arguments]
+    return fn.apply( this instanceof Fn ? this : context , bindArgs )
+  }
+  Fn.prototype = Object.create(fn.prototype)
+  return Fn
+}
+
+const boundFn = B.sayName.myBind(A, 'aaa', 'bbb')
+boundFn()
+
+
+
+Promise.prototype.myAll = function(arr) {
+  return new Promise((resolve, reject) => {
+      const resResults = []
+      let counter = 0
+      arr.forEach((item, index) => {
+        Promise.resolve(item).then(res => {
+          resResults[index] = res
+          counter++
+          if(counter === arr.length) {
+            return resolve(resResults)
+          }
+        }, err => reject(err))
+      })
+
+  })
+}
+
+const arr1 = [101, 201 , 301].map(i => {
+  return new Promise(resolve => {
+    setTimeout(() => {
+      resolve(i)
+    } , i)
+  })
+})
+
+
+Promise.prototype.myAll(arr1).then(res => console.log(res)).catch(err => console.log(err))

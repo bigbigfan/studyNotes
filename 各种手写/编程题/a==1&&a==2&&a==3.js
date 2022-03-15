@@ -2,7 +2,6 @@
 const a = {
   value: [1, 2, 3],
   valueOf: function () {
-    console.log("diaoyong");
     return this.value.shift();
   },
 };
@@ -33,3 +32,22 @@ Object.defineProperty(c, "value", {
 });
 
 console.log(c.value === 1 && c.value == 2 && c.value == 3);
+
+
+
+
+
+
+const x = {
+  value: '',
+  number: 0
+}
+
+Object.defineProperty(x, 'value',{
+  get: function() {
+     x.number++
+     return x.num
+  }
+})
+
+console.log(x.value === 1 && x.value == 2 && x.value == 3);

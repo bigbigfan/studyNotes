@@ -30,3 +30,49 @@ function add(arr) {
 }
 
 console.log(add(addArr));
+
+
+
+
+
+function bableF(arr) {
+  const l = arr.length
+  for(let i = 0; i < l; i++) {
+    let flag = true
+    for(let j = 0; j < l - i; j++) {
+      if(arr[j] > arr[j + 1]) {
+        [arr[j], arr[j+1]] = [arr[j+1], arr[j]]
+        flag = false
+      }
+    }
+    if(flag) {
+      return arr
+    }
+  }
+  return arr
+}
+
+const arr1 = [3,1,2,4,4,5,6,6,6]
+
+console.log(bableF(arr1))
+
+
+
+
+
+const bable313 = function(arr) {
+  const l = arr.length
+  for(let i = 0; i < l; i++) {
+    let flag = true
+    for(let j = 0; j < l - i - 1; j++) {
+      if(arr[j] > arr[j+1]) {
+        [arr[j], arr[j+1]] = [arr[j+1], arr[j]]
+        flag = false
+      }
+    } 
+    if(flag) return arr
+  }
+  return arr
+}
+
+console.log(bable313([1,3,4,2,5]), '3-13');

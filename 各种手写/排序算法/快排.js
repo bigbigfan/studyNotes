@@ -41,11 +41,7 @@
 // console.log(quick(arr));
 // console.timeEnd('quick sort')
 
-
-
-
-
-// 三路快排  --- 1 
+// 三路快排  --- 1
 
 //  分区函数
 const partition = function (arr, L, R) {
@@ -62,12 +58,12 @@ const partition = function (arr, L, R) {
     } else if (arr[i] > p) {
       // 当前i指向的元素大于p，将gt-1处的元素与当前索引处的元素交换位置，gt--
       // [arr[gt - 1], arr[i]] = [arr[i], arr[gt - 1]];
-      swap(arr, gt - 1, i)
+      swap(arr, gt - 1, i);
       gt--;
     } else {
       // 当前i指向的元素小于p，将lt+1处的元素与当前索引处的元素交换位置，lt+1，i+1
       // [arr[lt + 1], arr[i]] = [arr[i], arr[lt + 1]];
-      swap(arr, lt + 1, i)
+      swap(arr, lt + 1, i);
       lt++;
       i++;
     }
@@ -75,17 +71,17 @@ const partition = function (arr, L, R) {
 
   // i走向gt处，除了基准值外的元素，其余的空间已经分区完毕，交换基准值与lt处的元素，lt-1，最终得到我们需要的三个区间
   // [arr[L], arr[lt]] = [arr[lt], arr[L]];
-  swap(arr, L, lt)
+  swap(arr, L, lt);
   lt--;
-  console.log(`三路快排后的数组: ${arr}`);
+  // console.log(`三路快排后的数组: ${arr}`);
   return { lt: lt, gt: gt };
 };
 
 const swap = (arr, i, j) => {
-   let temp = arr[i]
-   arr[i] = arr[j]
-   arr[j] = temp
-}
+  let temp = arr[i];
+  arr[i] = arr[j];
+  arr[j] = temp;
+};
 
 // const dataArr = [3, 2, 1, 4];
 // console.log(partition(dataArr, 0, dataArr.length - 1));
@@ -103,22 +99,17 @@ const threeWayFastRow = function (arr, L, R) {
 };
 
 console.time("三路快排");
-const dataArr = [3, 5, 8, 1, 2, 9, 4, 7, 6];
+const dataArr = [3, 1, , 4, 5, 2, 2, 3];
 threeWayFastRow(dataArr, 0, dataArr.length - 1);
-console.log(`三路快排完成: ${dataArr}`);
+// console.log(`三路快排完成: ${dataArr}`);
 console.timeEnd("三路快排");
-
-
-
-
-
 
 //  三路快排 --- 2
 // function quickSort(array) {
 //   // change code below this line
 //   let arr = array
 //   myQuickSort(arr, 0, arr.length - 1)
-  
+
 //   // 主程序递归逻辑
 //   function myQuickSort(a, l, r) {
 //     if (l >= r) return
@@ -158,3 +149,37 @@ console.timeEnd("三路快排");
 // }
 // console.log(quickSort([1, 4, 2, 8, 345]))
 
+const Arr = [3, 1, 4, 5, 2, 2, 3];
+const quickSort1 = (arr) => {
+  const l = arr.length;
+  if (l <= 1) return arr;
+  const left = [];
+  const right = [];
+  const half = l / 2 || 0;
+  const halfItem = arr.splice(half, 1)[0];
+  arr.map((i) => {
+    i < halfItem ? left.push(i) : right.push(i);
+  });
+  return [...quickSort1(left), halfItem, ...quickSort1(right)];
+};
+console.time("start");
+console.log(quickSort1([3,2,1,4,5,6,2,3,45]));
+console.timeEnd("start");
+
+
+
+
+const quick313 = function(arr) {
+  const l = arr.length
+  if(l <= 1) return arr  //  长度小于1是递归的终点
+  const left = []
+  const right = []
+  const half = l / 2 || 0
+  const halfItem = arr.splice(half, 1)[0] // 这里，容易忘切，出一个数
+  arr.map(i => {
+    i < halfItem? left.push(i) : right.push(i)
+  })
+  return [...quick313(left), halfItem, ...quick313(right)]
+}
+
+console.log(quick313([3,2,1,4,5,6,2,3,45]));

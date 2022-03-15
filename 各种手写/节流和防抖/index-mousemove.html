@@ -13,16 +13,16 @@
     }
 
     // 防抖
-    // function debounce (fn, delay) {
-    //     let timer
-    //     return (...args) => {
-    //         clearTimeout(timer)
-    //         timer = setTimeout(() => {
-    //             // fn.apply(this, arguments)
-    //             fn(...args)
-    //         }, delay);
-    //     }
-    // }
+    function debounce (fn, delay) {
+        let timer
+        return (...args) => {
+            clearTimeout(timer)
+            timer = setTimeout(() => {
+                // fn.apply(this, arguments)
+                fn(...args)
+            }, delay);
+        }
+    }
 
     // 定时器法节流
     // function throttle1(fn, delay) {
@@ -79,35 +79,35 @@
     // }
 
 // ==================1-7 忘了就写一次====================== 
-    function throttle2(fn ,delay) {
-       let previous = 0 // 取0就是马上会执行一次
-       return (...args) => {
-           const now = Date.now()
-           if(now - previous >= delay) {
-                  fn(...args)
-                  previous = now
-           }
-       }
-    }
+    // function throttle2(fn ,delay) {
+    //    let previous = 0 // 取0就是马上会执行一次
+    //    return (...args) => {
+    //        const now = Date.now()
+    //        if(now - previous >= delay) {
+    //               fn(...args)
+    //               previous = now
+    //        }
+    //    }
+    // }
 
 
-    function throttle1(fn, delay) {
-         let timer, isFirst = true
-         return (...args) => {
-            if(isFirst) {
-              fn(...args)
-              isFirst = false
-            } 
-            if(!timer) {
-               timer = setTimeout(() => {
-                fn(...args)
-                timer = null
-               }, delay)
-            }
-         } 
-    }
+    // function throttle1(fn, delay) {
+    //      let timer, isFirst = true
+    //      return (...args) => {
+    //         if(isFirst) {
+    //           fn(...args)
+    //           isFirst = false
+    //         } 
+    //         if(!timer) {
+    //            timer = setTimeout(() => {
+    //             fn(...args)
+    //             timer = null
+    //            }, delay)
+    //         }
+    //      } 
+    // }
 // =======================================================
     
-    window.onmousemove = throttle1(showPosition, 1000);
+    window.onmousemove = debounce(showPosition, 100);
   </script>
 </html>

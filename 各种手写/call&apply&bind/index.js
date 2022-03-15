@@ -46,15 +46,16 @@ Function.prototype.myBind = function (context = global, ...args) {
     );
   }
 
-  let fn = this; // 创建一个函数副本
+  let fn = this;
+  console.log('hahha', fn);
   const Fn = function () {
     //  bind后的函数副本执行的时候也可以传入参数
     // 根据调用方式 传入不同绑定值
     const binArgs =  [...args,...arguments]
-    return fn.apply(this instanceof Fn ? this : context, binArgs);
+    return fn.call(this instanceof Fn ? this : context, ...binArgs);
   };
   Fn.prototype = Object.create(fn.prototype); // 维护原型
-  return Fn;
+  return Fn;  
 };
 
 // console.log(Log.bind(obj, ['wzf', 'front'])());
@@ -77,9 +78,9 @@ bar.prototype.friend = "kevin"; // 原型上加东西了 bind之后也要保证�
 
 let bindFoo = bar.myBind(foo, "disy"); // 作为构造函数调用
 
-let bindObj = new bindFoo(12)
+// let bindObj = new bindFoo(12)
 
-console.log(bindObj.friend); // 维护了原型，这样构造函数生成的实例可以访问原型上的属性
+// console.log(bindObj.friend); // 维护了原型，这样构造函数生成的实例可以访问原型上的属性
 
 
 
@@ -94,3 +95,33 @@ console.log(bindObj.friend); // 维护了原型，这样构造函数生成的实
 
 
 // bind 的性质是这样的 bind之后的函数如果作为了一个构造函数 被new调用 那么this是保留的 如果是普通的函数调用那么就用bind的对象的上下文
+
+
+Function.prototype.newbind = function(context, ...args) {
+   if(typeof this !== 'function') {
+     throw new TypeError('the argument which bound must been type of function')
+   }  
+   
+   const fn = this
+   const Fn = function() {
+      const bindArgs = [...args, ...arguments]
+      return fn.apply(this instanceof Fn? this : context, bindArgs)
+   }   
+   Fn.prototype = Object.create(fn.prototype)
+   return Fn
+}
+
+function kar () {
+  return this.name
+}
+
+kar.prototype.wzf = 'txj'
+
+const boundObj = {
+  name: 'bound obj'
+}
+
+const bounFn = kar.newbind(boundObj)
+
+
+

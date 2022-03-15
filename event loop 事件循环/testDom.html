@@ -6,14 +6,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
   </head>
+  <style>
+    .box {
+      width: 1000px;
+      height: 500px;
+      display: flex;
+    }
+    .box1 {
+      flex: 2 1 300px;
+      height: 100%;
+      background-color: yellow;
+    }
+    .box2 {
+      flex: 1 1 400px;
+      height: 100%;
+      background-color: blue;
+    }
+  </style>
   <body>
-    <span>12312312321</span>
+    <div class="box">
+      <div class="box1">1</div>
+      <div class="box2">2</div>
+    </div>
   </body>
   <script>
-    setTimeout(() => {
-      const x = Date.now();
-      console.log(x);
-    }, 1000);
+    // setTimeout(() => {
+    //   const x = Date.now();
+    //   console.log(x);
+    // }, 1000);
 
     // 一，浏览器是多进程的
 
