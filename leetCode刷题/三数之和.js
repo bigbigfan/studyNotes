@@ -63,3 +63,66 @@
 // }
 
 // console.log(threeSumClosest([1, 2, 3, 4, 10, 16], 30))
+
+
+
+
+
+
+const threeNumber = function(arr, number) {
+     const l = arr.length
+     if(l < 3) return new Error('length must >= 3')
+     
+
+     let res = arr[0] + arr[1] + arr[l-1]
+
+     for(let i = 0; i < l - 2; i++) {
+       const n1 = arr[i]  // 当前轮次外层循环的基数
+       let left = 0, right = l - 1
+         while(left < right) { // 只要左小于右就开始双指针遍历
+            let curRes = arr[i] + arr[left] + arr[right]
+           if(Math.abs(curRes - number) < Math.abs(res - number)) {
+               res = curRes
+           }
+            if(curRes > number) {
+                right--
+             } else if(curRes < number) {
+                 left++
+             } else {
+                 return curRes
+             }
+         }
+     }
+     return res
+
+}
+
+// console.log(threeNumber([1,2,3,4,5], 13));
+
+
+
+
+
+const threeSum = (arr, num) => {
+    const l = arr.length
+    let sum = arr[0] + arr[1] + arr[l-1]
+    for(let i = 0; i < l - 2; i++) {
+        let left = 0; right = l -1
+        let curSum = arr[i] + arr[left] + arr[right]
+        while(left < right) {
+           if(Math.abs(curSum - num) < Math.abs(sum - num)) {
+               sum = curSum
+           }
+           if(curSum < num) {
+               left++
+           } else if (curSum > num) {
+               right--
+           } else {
+               return curSum
+           }
+        }
+    }
+    return sum
+}
+
+console.log(threeSum([1,2,3], 10));

@@ -114,14 +114,24 @@ function aNew(constructor, ...args) {
     return  temp !== null && (typeof temp == 'function' || typeof temp == 'object') ? temp : instance
 }
 
+
+
+//  =========== 第四版 
+
+const myNew4 = function (constructor, ...args) {
+     const instance = new Object()
+     const temp = constructor.call(instance, ...args)
+     instance.__proto__ = constructor.prototype
+     return temp !== null && (typeof temp === 'object' || typeof temp === 'function') ? temp : instance
+}
 function person(name, age) {
-   this.name = name
-   this.age = age
+  this.name = name
+  this.age = age
 }
 person.prototype.friend = 'txj'
 
 
-const personWzf = aNew(person, 'wzf', 25)
+const personWzf = myNew4(person, 'wzf', 25)
 // const personWzf = new person('wzf', 25)
 
 console.log(personWzf, personWzf.friend);

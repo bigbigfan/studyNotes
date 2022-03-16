@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function reAxios(url) {
+            const Max = 3
+            let counter = 0
+           
+            // retry重试
+            function retry(url, error, resolve, reject) {
+                if(counter >= Max) return reject(error)
+                counter++
+                fetch(url)
+                .then(res => {
+                    console.log(res)
+                })
+                .catch(err => {
+                  retry(url, err, resolve, reject)
+                })
+            }
+  
+            return new Promise((resolve, reject) => {
+                 retry(url, error = new Error('error'), resolve, reject)
+            })
+        }
+
+        reAxios('www.baidu.com')
+    </script>
+</body>
+</html>
