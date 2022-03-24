@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .trg {
+        width: 0;
+        height: 0;
+        border: 10px solid black;
+        border-color: transparent transparent black transparent;
+    }
+    .true-trg {
+        width: 0;
+        height: 0;
+        /* width height 肯定都要是0 让border去分配四个边的区域 */
+        border-style: solid;
+        border-color: transparent transparent black transparent;
+        /* 骚的来了  
+        1，上面的boder-widh设成0 那么下面的border会撑满y轴的border
+        2，这里就只留左右 和 下 的border分配空间
+        3，左右的border-width = 想要的三角形边长 l / 2 
+        4，得到bottom-border-widt =  左右的border-width * tan60
+        */
+        /* 如果我要一个100px边长的正三角形 */
+        border-width: 0 50px  85px  50px;
+    }
+</style>
+<body>
+    <!-- 普通三角形 -->
+    <div class="trg"></div>
+    <!-- 正三角形 -->
+    <div class="true-trg"></div>
+</body>
+</html>

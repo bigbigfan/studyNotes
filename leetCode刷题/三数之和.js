@@ -35,34 +35,34 @@
 
 
 // 感觉这样写也差不多
-// const threeSumClosest = function (nums, target) {
-//   nums.sort((a, b) => a - b)
-//   const l = nums.length
-//   let res = nums[0] + nums[1] + nums[2]
-//   for (let i = 0; i < l; i++) {
-//     const n1 = nums[i]
-//     let left = i + 1
-//     let right = l - 1
-//     while (left < right) {
-//       const n2 = nums[left]
-//       const n3 = nums[right]
-//       const sum = n1 + n2 + n3
-//       if (Math.abs(sum - target) < Math.abs(res - target)) {
-//         res = sum
-//       }
-//       if (sum > target) {
-//         right--
-//       } else if (sum < target) {
-//         left++
-//       } else {
-//         return sum
-//       }
-//     }
-//   }
-//   return res
-// }
+const threeSumClosest = function (nums, target) {
+  nums.sort((a, b) => a - b)
+  const l = nums.length
+  let res = nums[0] + nums[1] + nums[2]
+  for (let i = 0; i < l; i++) {
+    const n1 = nums[i]
+    let left = i + 1
+    let right = l - 1
+    while (left < right) {
+      const n2 = nums[left]
+      const n3 = nums[right]
+      const sum = n1 + n2 + n3
+      if (Math.abs(sum - target) < Math.abs(res - target)) {
+        res = sum
+      }
+      if (sum > target) {
+        right--
+      } else if (sum < target) {
+        left++
+      } else {
+        return sum
+      }
+    }
+  }
+  return res
+}
 
-// console.log(threeSumClosest([1, 2, 3, 4, 10, 16], 30))
+console.log(threeSumClosest([0, 1,2,3], 7))
 
 
 
@@ -125,4 +125,34 @@ const threeSum = (arr, num) => {
     return sum
 }
 
-console.log(threeSum([1,2,3], 10));
+console.log(threeSum([0,1,2,3], 7));
+
+
+const three = (arr, target) => {
+    const l = arr.length
+    let res = arr[0] + arr[1] + arr[l - 1]
+    
+    for(let i = 0; i < l - 2 ; i ++) {
+       let left = i + 1
+       let right = l - 1 
+       while(left < right) {
+        let sum = arr[left] + arr[right] + arr[i]
+         if(Math.abs(sum - target) < Math.abs(res - target)) {
+           res = sum
+         } 
+         if(sum < target) {
+           left++
+         } else if(sum > target) {
+           right--
+         } else {
+           return sum
+         }
+       }
+    }
+    return res
+  
+  } 
+  console.log(three([0, 1 , 2 , 3], 7));
+  
+  
+  

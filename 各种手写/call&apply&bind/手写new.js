@@ -327,3 +327,160 @@ const arr1 = [101, 201 , 301].map(i => {
 
 
 Promise.prototype.myAll(arr1).then(res => console.log(res)).catch(err => console.log(err))
+
+
+
+
+
+
+
+
+const myNew316 = function(constructor, ...args){
+      const instance =  myCreate(constructor.prototype)
+      // const instance = new Object()
+      // instance.__proto__ = constructor.prototype
+      const temp = constructor.call(instance, ...args) // thi指向当前实例
+      return temp !== null && (typeof temp === 'object' || typeof temp === 'function') ? temp : instance
+}
+
+function Person(name){
+    this.name = name
+    this.gender = 'male'
+}
+Person.prototype.height = '178'
+
+
+const wzf = myNew316 (Person, 'wzf')
+
+console.log(wzf, wzf.height);
+
+
+
+function myCreate(obj) {
+    function Fn () {}
+    Fn.prototype = obj
+    return new Fn 
+}
+
+
+
+function myInsatance (left, right) {
+  const prototype = right.prototype
+  let leftP = left.__proto__ 
+  
+  while(true) {
+    if(leftP === null) return false
+    if(leftP === prototype) return true
+    leftP = leftP.__proto__
+  }
+}
+
+const obj = {a: 1}
+
+console.log(myInsatance(obj, Object));
+
+
+
+
+
+Function.prototype.myCall = function(context, ...args) {
+    const fn = this
+    const key = Symbol()
+    context[key] = fn
+    const result = context[key](...args)
+    delete context[key]
+    return result
+}
+
+Function.prototype.myApply = function (context, args) {
+    const fn = this
+    const key = Symbol()
+    context[key] = fn
+    const res = context[key](...args)
+    delete context[key]
+    return res
+}
+
+
+Function.prototype.myBind = function(context, ...args) {
+    const fn = this
+   function Fn() {
+     const bindArgs = [...args, ...arguments]
+     return fn.call(this instanceof Fn? this : context , bindArgs)
+   }
+   Fn.prototype = Object.create(fn.prototype)
+   return Fn
+}
+
+
+const a = {
+  name: 'wzf',
+}
+
+const b = {
+  name: 'aaaa',
+  say: function(gender, height = '178') {
+      return this.name + gender + height
+  }
+}
+
+
+const boundFn = b.say.myBind(a, 'male')
+const res = boundFn('180')
+console.log(res);
+
+console.log(b.name, b.say.myCall(a, 'male'), b.say.myApply(a, ['male']));
+
+
+
+
+Promise.prototype.myAll = function(arr) {
+  return new Promise((resolve, reject) => {
+     if(!Array.isArray(arr)) {
+       throw new TypeError('arguments must been Array!')
+     }
+    
+     let resResults = []
+     let counter = 0
+     const l = arr.length
+
+     arr.forEach((item, index) => {
+        Promise.resolve(item).then(res => {
+             resResults[index] = res
+             counter++
+             if(counter === l) {
+               return resolve(resResults)
+             }
+        }, err => reject(err))
+     })
+  })
+}
+
+
+Promise.prototype.myRace = function(arr) {
+  return new Promise((resolve, reject) => {
+      arr.forEach(i => {
+        Promise.resolve(i).then(res => {
+          return resolve(res)
+        }, err => reject(err))
+      })  
+  })
+}
+
+
+
+
+const promises = [300, 200, 1000].map(i => {
+  return new Promise(resolve => {
+     setTimeout(() => {
+         resolve(i)
+     }, i)
+  })
+})
+
+
+
+Promise.prototype.myRace(promises.concat(Promise.reject('errrr'))).then(res => {
+  console.log(res);
+})
+.catch(err => console.log(err))

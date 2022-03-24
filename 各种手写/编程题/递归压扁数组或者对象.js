@@ -50,3 +50,24 @@ const myFlatObj = (obj, preKey = '') => {
 console.log(myFlatObj(obj));
 
 
+
+
+
+var s = "bailn";
+var arr = [2, 3, 0, 1, 4];
+
+function reArr (s, arr) {
+    const newArr = []
+    const map = new Map
+    arr.forEach((item, index)=> {
+        map.set(s[index], item)
+    })
+    for(let i of map) {
+      // console.log(i);
+      newArr[i[1]] = i[0]
+    }
+
+    return newArr.join('')
+   
+}
+console.log(reArr(s, arr));

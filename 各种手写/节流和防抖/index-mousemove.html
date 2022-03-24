@@ -13,16 +13,16 @@
     }
 
     // 防抖
-    function debounce (fn, delay) {
-        let timer
-        return (...args) => {
-            clearTimeout(timer)
-            timer = setTimeout(() => {
-                // fn.apply(this, arguments)
-                fn(...args)
-            }, delay);
-        }
-    }
+    // function debounce (fn, delay) {
+    //     let timer
+    //     return (...args) => {
+    //         clearTimeout(timer)
+    //         timer = setTimeout(() => {
+    //             // fn.apply(this, arguments)
+    //             fn(...args)
+    //         }, delay);
+    //     }
+    // }
 
     // 定时器法节流
     // function throttle1(fn, delay) {
@@ -66,17 +66,17 @@
     //   };
     // }
 
-    // function throttle1(fn, delay) {
-    //   let timer 
-    //   return (...args) => {
-    //      if(!timer) {
-    //        timer = setTimeout(() => {
-    //         timer = null
-    //         fn(...args)
-    //        }, delay);
-    //      }
-    //   }
-    // }
+    function throttle1(fn, delay) {
+      let timer 
+      return (...args) => {
+         if(!timer) {
+           timer = setTimeout(() => {
+            timer = null
+            fn(...args)
+           }, delay);
+         }
+      }
+    }
 
 // ==================1-7 忘了就写一次====================== 
     // function throttle2(fn ,delay) {
@@ -108,6 +108,6 @@
     // }
 // =======================================================
     
-    window.onmousemove = debounce(showPosition, 100);
+    window.onmousemove = throttle1(showPosition, 1000);
   </script>
 </html>

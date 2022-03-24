@@ -183,3 +183,145 @@ const quick313 = function(arr) {
 }
 
 console.log(quick313([3,2,1,4,5,6,2,3,45]));
+
+
+
+
+
+
+
+
+const quick = function (arr) {
+   const l = arr.length
+   if(l < 1) return arr
+   const left = []
+   const right = []
+   const half = l / 2 || 0
+   const halfItem = arr.splice(half, 1)[0]
+   arr.forEach(i => {
+     i < halfItem ? left.push(i) : right.push(i)
+   })
+    
+   return [...quick(left), halfItem, ...quick(right)]
+}
+
+console.log(quick([3,2,4,1,5]));
+
+
+const babel = function (arr) {
+  const l = arr.length
+  for(let i = 0; i < l; i++) {
+    let flag = false
+    for(let j = 0; j < l - i -1; j++) {
+       if(arr[j] > arr[j + 1]) {
+          [arr[j], arr[j+1]] = [arr[j+1], arr[j]]
+          flag = true
+       }
+    }
+    if(!flag) return arr
+  } 
+  return arr
+}
+
+console.log(babel([3,2,4,1,5]));
+
+
+
+
+
+Array.prototype.myReduce =  function(fn, init) {
+      const arr = this
+      const l = arr.length
+      let tol = init || arr[0]
+      for(let i = init ? 0 : 1; i < l; i++) {
+        tol = fn(tol, arr[i], i , arr)
+      }
+      return tol
+} 
+
+console.log([1,2,3,4].myReduce( (tol, cur) => { return tol += cur} ,0));
+
+
+
+
+
+
+
+
+
+
+
+function debounce(fn, delay = 0) {
+   let timer = null
+   return (...args) => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+          fn(...args)
+      }, delay)
+   }
+}
+
+function throttle(fn, delay = 0) {
+  let previous = Date.now()
+  return (...args) => {
+      const now = Date.now()
+    if( now - previous >= delay) {
+        fn(...args)
+        previous = now 
+    } 
+  }
+}
+
+function throttle2(fn, delay = 0) {
+  let timer 
+  return (...args) => {
+    if(!timer) {
+      timer = setTimeout(() => {
+       fn(...args)
+       timer = null
+      }, delay)
+   }
+  }
+}
+
+function throttle1(fn, delay) {
+  let timer, isFirst = true
+  return (...args) => {
+    if(isFirst) {
+      fn(...args)
+      isFirst = false
+    }
+     if(!timer) {
+       timer = setTimeout(() => {
+        timer = null
+        fn(...args)
+       }, delay);
+     }
+  }
+}
+
+
+function shot() {
+  console.log('shot');
+}
+
+const dShot = throttle1(shot, 1000)
+
+while(true) {  
+  dShot()
+}
+
+
+
+
+
+
+function Person() {
+    this.name = 'wzf'
+}
+
+
+function Child() {
+      Person.call(this, arguments)
+}
+

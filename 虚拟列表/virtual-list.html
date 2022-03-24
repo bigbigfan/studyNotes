@@ -61,6 +61,11 @@
                  </div>
               </div>
         </div>
+        <div>
+          {{test}}
+        </div>
+        <button @click="changeByIndex">修改下标</button>
+        <button @click="changeByPush">push</button>
      </div> 
 </body>
 <script>
@@ -69,11 +74,12 @@
       data() {
         return {
           itemSize: 100, // 固定的列表项高度
-          screenHeight: 0, // 固定的视图区域高度
+          screenHeight: 1000, // 固定的视图区域高度
           listData: [], // 总条目
           start: 0,
           end: null,
-          startOffset: 0 // 偏移量
+          startOffset: 0, // 偏移量
+          test: [1,2,3]
         }
       },
       computed: {
@@ -93,7 +99,9 @@
            return this.listData.slice(this.start, Math.min(this.end, this.listData.length))
          }
       },
+      
       mounted() {
+        // console.log('test', this.visibleData)
           //  制造数据
           for(let i = 0; i < 5000; i++) {
             const obj = {
@@ -102,10 +110,16 @@
             }
             this.listData.push(obj)
           }
-          this.screenHeight = 1000
+          // this.screenHeight = 1000
           this.start = 0
           this.end = this.start + this.visibleCount
       }, 
+      watch: {
+         test(val) {
+             console.log(val, val.__ob__.dep.subs[1],'watch');
+
+         }
+      },
       methods: {
         scrollEvent(e) {
           console.log(e);
@@ -113,6 +127,14 @@
           this.start = Math.floor(scrollTop / this.itemSize)
           this.end = this.start + this.visibleCount + 1
           this.startOffset = scrollTop -(scrollTop % this.itemSize)
+        },
+        changeByIndex() {
+          this.test[2] = 999
+          console.log(this.test, 'after');
+        },
+        changeByPush() {
+          this.test.push(999)
+          console.log(this.test, 'after2');
         }
       }
     })
