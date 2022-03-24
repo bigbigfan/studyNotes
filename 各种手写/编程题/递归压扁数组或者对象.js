@@ -39,35 +39,33 @@ const flatObj = (obj, preKey = '') => {
 
 
 const myFlatObj = (obj, preKey = '') => {
-    return Object.keys(obj).reduce((tol, cur) => {
-      const value = obj[cur]
-      const isObj = typeof value === 'object'
-      const newKey = preKey?`${preKey}.${cur}` : cur 
-      return isObj? {...tol, ...myFlatObj(value, newKey)} : {...tol, [newKey]: value}   
-    }, {}) 
+  return Object.keys(obj).reduce((tol, cur) => {
+    const value = obj[cur]
+    const isObj = typeof value === 'object'
+    const newKey = preKey?`${preKey}.${cur}` : cur 
+    return isObj? {...tol, ...myFlatObj(value, newKey)} : {...tol, [newKey]: value}   
+  }, {}) 
 }
 
 console.log(myFlatObj(obj));
 
 
 
+const obj = {a: 1, b: {c : {d: {e: 1}}}}
 
-
-var s = "bailn";
-var arr = [2, 3, 0, 1, 4];
-
-function reArr (s, arr) {
-    const newArr = []
-    const map = new Map
-    arr.forEach((item, index)=> {
-        map.set(s[index], item)
-    })
-    for(let i of map) {
-      // console.log(i);
-      newArr[i[1]] = i[0]
-    }
-
-    return newArr.join('')
-   
+function flatobj(obj, prekey = '') {
+    const isObj = value => typeof value === 'object'
+    return Object.keys(obj).reduce((tol, cur) => {
+        const value = obj[cur]  
+        const key = prekey ? `${prekey}.${cur}` : cur  // 有prekey的就.累加 没有的就用当前key
+        return isObj(value) ? {...tol, ...flatobj(value, key)} : {...tol, [key]: value }  
+    }, {})
 }
-console.log(reArr(s, arr));
+console.log(flatobj(obj));
+const arr = [ 1, [2, [3, [4]]]]
+function myflat(arr) {
+    return arr.reduce((tol, cur) => {
+        return tol.concat(Array.isArray(cur)? myflat(cur) : cur)
+    }, [])
+}
+console.log(myflat(arr));
