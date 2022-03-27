@@ -69,3 +69,11 @@ function myflat(arr) {
     }, [])
 }
 console.log(myflat(arr));
+
+
+const Fn = function () {
+  this.name = 'wzf'
+}
+const instance = new Fn()
+
+console.log(instance.__proto__.constructor);
