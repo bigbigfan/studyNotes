@@ -67,8 +67,12 @@
     // }
 
     function throttle1(fn, delay) {
-      let timer 
+      let timer, isFirst = true
       return (...args) => {
+         if(isFirst) {
+           fn(...args)
+           isFirst = false
+         }
          if(!timer) {
            timer = setTimeout(() => {
             timer = null
@@ -108,6 +112,6 @@
     // }
 // =======================================================
     
-    window.onmousemove = throttle1(showPosition, 1000);
+    window.onmousemove = throttle1(showPosition, 2000);
   </script>
 </html>

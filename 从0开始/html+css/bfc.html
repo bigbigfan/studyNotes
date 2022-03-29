@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .box1, .box2 {
+        height: 100px;
+        width: 100px;
+        background-color: red;
+    }
+    .box1 {
+        margin-bottom: 20px;
+        /* display: inline-block;   */
+        /* 1，其中一个盒子开启行内块级元素 */
+    }
+    .box2 {
+        margin-top: 30px;
+        /* float: left; */
+        /* 2，或者下方盒子开启浮动。3，或者其中一个盒子用div容器包括overflow：hidden开启bfc也可以 */
+    }
+  
+    .split {
+        height: 0;
+        border: 1px solid black;
+        margin: 20px 0;
+    }
+
+    .box3 {
+        height: 100px;
+        width: 100px;
+        background-color: red;
+        overflow: hidden; /* 开启bfc */
+    }
+    .box4 {
+        height: 50px;
+        width: 50px;
+        background-color: black;
+        margin-top: 50px;
+       
+    }
+
+    
+</style>
+<body>
+    <!-- bfc其实就是块级格式化上下文，开启bfc的盒子产生独立于外界的渲染模式 -->
+    <!-- 常见的方法 display: inline-block , flex, float, overflow:hidden, position absolute或是fixed  -->
+    <!-- 可以用来解决外边距重叠，边框塌陷等问题 -->
+    
+
+    <!-- 外边距重叠 -->
+    <div class="box1">A</div>
+    <div class="box2">B</div>
+    
+    <!-- 分割层 -->
+    <div class="split"></div>
+    
+    <!-- 边框塌陷 -->
+    <div class="box3">
+        <div class="box4"></div>
+    </div>
+    
+</body>
+</html>
