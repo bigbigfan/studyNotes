@@ -18,6 +18,39 @@ function add (num1, num2) {
 console.log(add('199','11'));
 
 
+function add1(num1, num2) {
+    const l1 = num1.length
+    const l2 = num2.length
+    let i = l1 - 1
+    let j = l2 - 1
+    let cache = 0
+    let res = ''
+
+    while(i >= 0 || j >= 0 || cache !== 0) {
+         const cur1 = num1[i] ? +num1[i] : 0
+         const cur2 = num2[j] ? +num2[j] : 0
+         // 当前竖向求和
+         const sum = cur1 + cur2 + cache
+          
+         cache = Math.floor(sum / 10)
+
+         res =  res + sum % 10
+         i--
+         j--
+    }
+
+    return res
+}
+
+
+
+
+
+
+
+
+
+
 
 // 官方这里是操作数组push 所以最后需要reverse   
 function addString(num1, num2) {

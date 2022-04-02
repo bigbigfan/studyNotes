@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+  </body>
+ 
+   <script>
+    //  const p = () => new Promise((reoslve, reject) => {
+    //    reject('错了！')
+    //  })
+     
+    //  const x = async() => {
+    //    console.log('毛都不做');
+    //     await p
+    //  }
+
+    //  x()
+    setTimeout(() => {
+    throw 'st error'
+ }, 1000);
+
+    window.addEventListener('unhandledrejection', function(e) {
+        console.log(e, '我被unhandledrejection抓住了');
+    }, true)
+    window.addEventListener('error', function(e) {
+        console.log(e, '我被error抓住了');
+    }, true)
+    // window.onerror = function(e) {
+    //   console.log(e, '非promise的error');
+    // }
+  </script>
+  <script src="./errorScript.js" ></script>
+  <!-- <script>
+    window.addEventListener('error', (error) => {
+      console.log('捕获到异常：', error);
+    }, true)
+  </script>
+
+  <script src="./errorScript.js" ></script>  -->
+
+
+ 
+
+
+  
+</html>

@@ -20,3 +20,17 @@ function reverseArr(s) {
     return s
 }
  console.log(reverseArr([1,2,3,4]));
+
+
+function reverseArr2(s) {
+   const arr = s.split('')
+   const l = arr.length
+   console.log(arr);
+   const half = Math.floor(l / 2)
+   for(let i = 0; i < half; i++) {
+       [arr[i], arr[l - 1- i]] = [arr[l - 1- i], arr[i]]
+   }
+   return arr.join('') === s
+}
+
+console.log(reverseArr2('abcdcba'));

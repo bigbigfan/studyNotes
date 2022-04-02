@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    #box {
+      width: 0px;
+      height: 50px;
+      background-color: blue;
+    }
+  </style>
+  <body>
+    <h1>requestAnimationFrame API</h1>
+    <button id="begin" class="begin">开始</button>
+    <button id="end" class="end">停止</button>
+    <div id="box"></div>
+    <!-- <h1>requestAnimationFrame API</h1>
+    <button id="begin" class="begin">开始</button>
+    <button id="end" class="end">停止</button> -->
+  </body>
+  <script>
+    (() => {
+      const beginBtn = document.querySelector("#begin");
+      const endBtn = document.querySelector("#end");
+      const box = document.querySelector("#box");
+      let myRef;
+
+      beginBtn.addEventListener("click", () => {
+        myRef = requestAnimationFrame(test);
+      });
+
+      endBtn.addEventListener("click", () => {
+        cancelAnimationFrame(myRef);
+      });
+
+      function test() { 
+        box.style.width = `${myRef}%`;
+        myRef = requestAnimationFrame(test);// 回调里面要自行再调用raf才会连续执行动画
+      }
+    })();
+
+    // let n = 0;
+    // let start = Date.now()   // 起始时间
+    // const beginBtn = document.querySelector("#begin");
+    // beginBtn.addEventListener("click", () => {
+    //   requestAnimationFrame(test);
+    // });
+
+    // const endBtn = document.querySelector('#end')
+    // endBtn.addEventListener("click", () => {
+    //     console.log('取消');
+    //     cancelAnimationFrame(n)
+    // })
+
+    // function test() {
+    // //   console.log(`🚀🚀hello ~ requestAnimationFrame ${n}`);
+    //   const now = Date.now()
+    //   if(now - start >= 1000) {
+    //       console.log('时间到了，操作', now - start);
+    //       start = now
+    //   }
+    //   const res = requestAnimationFrame(test);
+    //   n = res
+    // }
+  </script>
+</html>

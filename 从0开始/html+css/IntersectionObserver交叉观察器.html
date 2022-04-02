@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IntersectionObserver交叉观察器</title>
+</head>
+<style>
+   #box {
+     width: 100px;
+     height: 100px;
+     background-color: red;
+   }
+   #bar {
+       width: 10px;
+       height: 2000px;
+   }
+</style>
+<body>
+    <div id="bar">
+    <div id="box">123</div>
+    </div>
+</body>
+<script>
+ const box = document.getElementById('box')
+ const intersectionRatio = { threshold: [0, 0.25, 0.5, 0.75, 1]}
+// 开始观察
+var io = new IntersectionObserver(entries => {
+    console.log(entries);
+},intersectionRatio);
+
+io.observe(box)
+</script>
+</html>

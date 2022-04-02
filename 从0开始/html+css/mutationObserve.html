@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+   #box {
+       width: 100px;
+       height: 100px;
+   }
+</style>
+<body>
+    <div id="box"></div>
+</body>
+<script>
+// MutationObserver是微任务
+// 选择需要观察变动的节点
+let box = document.querySelector('#box'),
+// 观察器的配置（需要观察什么变动）
+config = { attributes: true };
+/*
+* 在我们创建MutationObserver对象的时候可以传入一个函数，
+* 
+*/
+let observer = new MutationObserver(mutations => {
+  console.log(mutations) 
+  // => 返回一个我们监听到的MutationRecord对象
+  // MutationRecord对象 是我们每修改一个就会在数组里面追加一个
+})
+// 监听的 元素 和 配置项,以上述配置开始观察目标节点
+observer.observe(box, config) 
+
+box.setAttribute('name','张三')// 修改属性
+box.style.background = 'green'// 修改样式
+// 之后，可停止观察 要放在宏任务里推迟之
+setTimeout(() => {
+    observer.disconnect();
+}, 100)
+
+</script>
+
+</html>

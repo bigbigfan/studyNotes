@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    .hr {
+      width: 300px;
+      background-color: #000;
+    }
+    .hr.scale-half {
+      height: 1px;
+      transform: scaleY(0.5);
+      transform-origin: 50% 100%
+    }
+    .hr.half-px {
+      height: 0.5px;
+    }
+    .hr.one-px {
+      height: 1px;
+    }
+  </style>
+  <body>
+    <p>1px + scaleY(0.5)</p>
+    <div class="hr scale-half"></div>
+    <p>0.5px</p>
+    <div class="hr half-px"></div>
+    <p>1px</p>
+    <div class="hr one-px"></div>
+  </body>
+</html>
