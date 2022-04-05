@@ -142,6 +142,7 @@ new MyPromise((resolve, reject) => {
     console.log(err, 'err!!!');
 })
 
+
 // const p = (value, delay) => new MyPromise(resolve => {
 //     setTimeout(() => {
 //         resolve(value, delay)

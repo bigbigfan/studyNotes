@@ -18,30 +18,6 @@ function add (num1, num2) {
 console.log(add('199','11'));
 
 
-function add1(num1, num2) {
-    const l1 = num1.length
-    const l2 = num2.length
-    let i = l1 - 1
-    let j = l2 - 1
-    let cache = 0
-    let res = ''
-
-    while(i >= 0 || j >= 0 || cache !== 0) {
-         const cur1 = num1[i] ? +num1[i] : 0
-         const cur2 = num2[j] ? +num2[j] : 0
-         // 当前竖向求和
-         const sum = cur1 + cur2 + cache
-          
-         cache = Math.floor(sum / 10)
-
-         res =  res + sum % 10
-         i--
-         j--
-    }
-
-    return res
-}
-
 
 
 
@@ -69,3 +45,26 @@ function addString(num1, num2) {
 }
 
 console.log(addString('123', '3211'));
+
+
+
+function bigAdd(nums1, nums2) {
+   let res = ''
+   let i = nums1.length - 1, j = nums2.length - 1, cache = 0
+   while(i >= 0 || j >=0 || cache !== 0) {
+       const n1 =  nums1[i] ? +nums1[i] : 0  
+       const n2 =  nums2[j] ? +nums2[j] : 0  
+
+       const sum = n1 + n2 + cache 
+       cache =  Math.floor(sum / 10) 
+       res =  sum % 10 + res  
+
+       i--
+       j--
+   }
+
+   return res
+}
+
+console.log(bigAdd('123', '877'));
+

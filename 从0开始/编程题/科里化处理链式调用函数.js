@@ -18,35 +18,20 @@
 // console.log(+add(1, 2)(2)(3)(4)(12));
 
 
-function add(...args) {
+const add = (...args) => {
     let sum = args.reduce((tol, cur) => tol += cur)
-    
-    function newSum(...newArgs) {
+    // 科里化处理该函数
+    const newSum = (...newArgs) => {
         sum = newArgs.reduce((tol, cur) => tol += cur, sum)
         return newSum 
     }
-
     newSum.toString = function() {
         return sum
     }
-
+    // 抛出该函数
     return newSum
 }
 
-console.log(add(1)(2)(3));
-function add1 () {
-    function fn () {
-        console.log('wo fn');
-    }
-    
-    fn.toString = function () {
-        console.log('wo tostring');
-        return 'tostring'
-    }
-    return fn
-}
-
-console.log(add1());
+console.log(+add(1)(2)(3));
 
 // toString() 方法返回一个表示当前函数源代码的字符串。  默认情况
-

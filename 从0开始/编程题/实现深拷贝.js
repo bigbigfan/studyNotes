@@ -1,12 +1,12 @@
 function deepClone (target, map = new Map() ) {
     if(typeof target !== 'object') return target
-
+    //  区分数组和对象
     const cloneTarget = Array.isArray (target) ? [] : {} 
     
-    if(map.has(cloneTarget)) {
-        return map.get(cloneTarget)
+    if(map.has(target)) {
+        return map.get(target)
     } else {
-        map.set(cloneTarget, target)
+        map.set(target, cloneTarget)
     }
     // 日期
     if(target instanceof Date) {
@@ -39,6 +39,8 @@ const wzf = {
         console.log('hahhahahh wzf');
     }
 }
+
+
 const txj = deepClone(wzf)
 txj.a.b.c = 2
 txj.d[2] = 4

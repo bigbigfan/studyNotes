@@ -13,3 +13,4 @@ const arr = [1,2,3,4]
 console.log(arr.myReduce((tol, cur) => {
     return tol += cur      
 }, 0));
+

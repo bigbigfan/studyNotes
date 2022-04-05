@@ -25,3 +25,29 @@ const multiply = function(num1, num2) {
 console.log(multiply('123', '456'));
 // console.log(54 /10 | 0);  // xx | 0   可以取整，绝活 
 // console.log(Math.floor(54 / 10)); // 也可以取
+
+
+function mul (num1, num2) {
+   const l1 = num1.length
+   const l2 = num2.length
+
+   const res = new Array(l1 + l2).fill(0)
+    
+   for(let i = l1 - 1; i >= 0 ; i--) {
+       const n1 =  +num1[i] 
+        for(let j = l2 - 1; j >= 0 ; j--) {
+            const n2 =  +num2[j] 
+            const sum = n1 * n2 + res[i + j + 1]
+            res[i + j + 1] = sum % 10
+            res[i + j] += Math.floor(sum / 10)
+        }    
+   }
+   while(res[0] == 0) {
+       res.shift()
+   }
+
+   return res.join('')
+}
+
+console.log(mul('101', '11'));
+

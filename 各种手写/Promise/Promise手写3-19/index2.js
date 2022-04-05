@@ -92,23 +92,9 @@ class MyPromise {
   }
 }
 
-const x = new MyPromise((resolve, reject) => {
-    resolve(123)
+ new Promise((resolve, reject) => {
+    reject(123)
 })
-.then(res => {
-    console.log(res);
-    return 1
-})
-.then(res => {
-    console.log(res);
-})
-// .catch(err => console.log(err))
-
-
-setTimeout(() => {
-    console.log(x);
-}, 1000);
-
 
 
 

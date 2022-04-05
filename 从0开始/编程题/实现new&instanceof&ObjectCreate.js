@@ -44,3 +44,5 @@ Object.prototype.myCreate = function (obj) {
 
 const x = Object.myCreate({haha: '123'})
 console.log(x, x.__proto__);
+
+

@@ -19,3 +19,22 @@ function maxStr(str) {
 
 // console.log(maxStr('12342178461234567890'));
 
+
+function max (s) {
+   const l = s.length
+   const set = new Set()
+   let curLength = 0, i = 0, j = 0
+   while(i < l) {
+      while(j < l && !set.has(s[j])) {
+          set.add(s[j])
+          j++
+      }
+      curLength =  Math.max(curLength, set.size)
+      set.delete(s[i])
+      i++
+   }
+
+   return curLength
+}
+
+console.log(max('12312332123456'));
