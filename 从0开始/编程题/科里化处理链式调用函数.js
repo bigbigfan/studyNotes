@@ -35,3 +35,22 @@ const add = (...args) => {
 console.log(+add(1)(2)(3));
 
 // toString() 方法返回一个表示当前函数源代码的字符串。  默认情况
+
+function add(...args) {
+   let sum = args.reduce((tol, cur) => tol += cur)
+   
+   const newSum = (...newArgs) => {
+       sum = newArgs.reduce((tol, cur) => tol += cur , sum)
+       return newSum
+   }
+
+   newSum.toString = function() {
+       return sum
+   }
+
+   return newSum
+
+}
+
+
+console.log(+add(1)(2)(3));

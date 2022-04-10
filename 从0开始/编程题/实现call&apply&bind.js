@@ -42,3 +42,8 @@ wzf.say.myCall(txj, 180, 25)
 wzf.say.myApply(txj, [180, 25])
 const bindSay = wzf.say.myBind(txj, 199, 250)
 bindSay('male')
+
+
+
+
+

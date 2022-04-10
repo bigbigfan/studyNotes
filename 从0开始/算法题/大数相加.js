@@ -68,3 +68,34 @@ function bigAdd(nums1, nums2) {
 
 console.log(bigAdd('123', '877'));
 
+
+
+
+
+
+
+function add (num1, num2) {
+    const l1 = num1.length
+    const l2 = num2.length
+
+    let res = ''
+    let cache = 0
+    let i = l1 - 1, j = l2 - 1
+    
+    while(i >= 0 || j >= 0 || cache !== 0) {
+         const n1 = num1[i] ? +num1[i] : 0
+         const n2 = num2[j] ? +num2[j] : 0
+
+         const sum = n1 + n2 + cache
+      
+         cache = Math.floor(sum / 10)  
+        
+         res =  sum % 10 + res
+         i--
+         j--
+    }
+    
+    return res
+}
+
+console.log(add('11', '999'));

@@ -11,9 +11,9 @@ class Subscribe {
          }
     }
   
-    emit(name) {
+    emit(name, ...args) {
         this.eventMap.hasOwnProperty(name) && this.eventMap[name].forEach(cb => {
-              cb()
+              cb(...args)
         })
     }
    
@@ -35,16 +35,25 @@ class Subscribe {
     }
 }
 
-function work() {
-    console.log('work');
+function work1(a) {
+    console.log(a);
+}
+
+function work2(a, b) {
+    console.log(a);
+    console.log(b);
 }
 
 const wzf = new Subscribe()
-wzf.once('work', work)
 
-// wzf.off('work', work)
+wzf.on('event', work1)
+wzf.on('event', work2)
 
-wzf.emit('work')
-wzf.emit('work')
-wzf.emit('work')
-wzf.emit('work')
+wzf.emit('event', 1, 2)
+
+
+
+
+
+
+

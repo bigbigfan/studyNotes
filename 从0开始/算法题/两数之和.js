@@ -14,3 +14,21 @@ function twoSum(nums, target) {
 
 
 console.log(twoSum([1,2,3,4,5], 9));
+
+
+
+
+function twoSum(nums, target) {
+    const map = new Map()
+
+    for(let i = 0; i < nums.length ;i++) {
+        const res = target - nums[i]
+       if(map.has(res)) {
+           return [i, map.get(res)]
+       } else {
+           map.set(nums[i], i)
+       }
+    }
+}
+
+console.log(twoSum([1,2,3,4,5], 9));

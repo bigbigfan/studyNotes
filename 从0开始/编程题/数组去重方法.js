@@ -18,3 +18,6 @@ function quchong(arr) {
 }
 
 console.log(quchong(arr));
+
+
+

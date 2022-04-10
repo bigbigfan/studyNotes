@@ -17,3 +17,5 @@ const c = new Child('180')
 
 console.log(c);
 c.say()
+
+

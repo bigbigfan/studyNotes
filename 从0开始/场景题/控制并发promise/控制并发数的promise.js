@@ -33,3 +33,39 @@ const sleep = (time, value) => () => new Promise((resolve) => setTimeout(() => {
 fetchWithLimit(2, [sleep(3000, 1), sleep(1000, 2), sleep(2000, 3), sleep(4000, 4)]).then((data) => {
   console.log('then data', data);
 });
+
+
+
+
+function promiselimit (promises, limit) {
+   return new Promise((resolve) => {
+      const l = promises.length
+      let curIndex = 0, finishIndex = 0, counter = 0
+   
+      function run () {
+        if(finishIndex >= l) return resolve('finish')  
+    
+        while(curIndex < l && counter < limit) {
+           promises[curIndex]().finally(() => {
+              finishIndex++     
+              counter--
+              run()
+           })
+           curIndex++
+           counter++
+      }
+    }
+    run()
+   })
+}
+
+const now = Date.now()
+const p = (value, delay) => () => new Promise(resolve => {
+    setTimeout(() => {
+         console.log(value, Date.now() - now);
+         resolve(value)
+    }, delay);
+})
+
+
+promiselimit([p(1,1000), p(2, 2000), p(3, 3000), p(4, 4000)], 2)

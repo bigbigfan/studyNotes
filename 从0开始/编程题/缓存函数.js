@@ -21,3 +21,34 @@ function mermory (fn, context) {
 }
 
 
+
+
+
+const mermory = function (fn, context) {
+    const cache = {}
+    const context = context ||  this
+    
+    return function(...args) {
+      if(!cache[args]) {
+        cache[args] = fn.call(context, ...args)
+      }
+      return cache[args]
+    }
+}
+
+console.log(mermory());
+
+
+
+
+function memoize(fn, context) {
+    const cache = {}
+    context = context || this
+    
+    return (...args) => {
+       if(!cache[args]) {
+         cache[args] = fn.call(context, ...args)
+       }
+       return cache[args]
+    }
+}

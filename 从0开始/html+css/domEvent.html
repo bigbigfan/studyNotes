@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>domEvent</title>
+</head>
+<style>
+    .box {
+        width: 100px;
+        height: 100px;
+        background-color: red;
+    }
+</style>
+<body>
+    <div class="box">
+        <button class="btn">click me</button>
+    </div>
+</body>
+<script>
+    // box同时绑定捕获和冒泡
+    //  const box = document.querySelector('.box')
+    //  box.addEventListener('click', function(e) {
+    //      console.log('box');   
+    //  })
+    //  box.addEventListener('click', function(e) {
+    //      console.log('box capture');   
+    //  }, true)   // box capure   box
+     
+    // btn同时绑定捕获和冒泡
+     const btn = document.querySelector('.btn')
+     btn.addEventListener('click', function(e) {
+         console.log('btn');   
+     })
+     btn.addEventListener('click', function(e) {
+         console.log('btn capture');   
+     }, true)  // btn capture     btn
+     
+ 
+  
+    //   证明的是： 永远都是先捕获后冒泡 与绑定的是不是触发事件的dom无关
+</script>
+</html>

@@ -91,3 +91,34 @@ function permute3 (nums) {
 console.log(permute3([1,2,3,3]));
 
 
+
+
+function permute4(nums) {
+    nums.sort()
+    const l = nums.length
+    const res = []  
+    const used = new Array(l)
+   function dfs(path) {
+      if(path.length === l) {
+        res.push(path.slice())
+        return 
+      }
+
+      for(let i = 0; i < l; i++) {
+        if(used[i]) continue
+        
+        if( nums[i - 1] === nums[i] && used[i - 1]) continue
+
+        used[i] = true
+        path.push(nums[i])
+        dfs(path)
+        path.pop()
+        used[i] = false
+      }
+   }
+
+   dfs([])
+   return res 
+}  
+
+console.log(permute4([1,2,3,3]))

@@ -51,3 +51,13 @@ Object.defineProperty(x, 'value',{
 })
 
 console.log(x.value === 1 && x.value == 2 && x.value == 3);
+
+
+  
+
+
+
+
+
+
+

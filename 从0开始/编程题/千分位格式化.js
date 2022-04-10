@@ -39,3 +39,4 @@ function format(number) {
 
 
 console.log(format(3500));
+

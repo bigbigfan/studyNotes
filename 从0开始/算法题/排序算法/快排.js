@@ -14,3 +14,6 @@ function quick(arr) {
 }
 
 console.log(quick([3,1,2,5,4]));
+
+
+

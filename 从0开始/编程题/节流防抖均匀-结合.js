@@ -37,3 +37,62 @@ function throttle2(fn, delay) {
 
 
 // 结合版本
+
+
+
+
+
+// 防抖 
+
+function debounce(fn, delay) {
+    let timer 
+   
+    return (...args) => {
+       clearTimeout(timer)
+       timer = setTimeout(() => {
+           fn(...args)
+       }, delay);
+    }
+}
+
+
+
+// 节流
+
+function throttle(fn, delay) {
+   let timer
+   let isFirst = true
+   return (...args) => {
+      if(isFirst) {
+          fn(...args)
+          isFirst = false
+      }
+
+      if(!timer) {
+          timer = setTimeout(() => {
+              fn(...args)
+              timer = null
+          }, delay);
+      }
+   }
+}
+
+
+
+
+
+
+function throttle2(fn, delay) {
+    let pre = Date.now()
+    
+    return (...args) => {
+       const now = Date.now()
+       if(now - pre >= delay) {
+          fn(...args)
+          pre = now
+       }
+    } 
+}
+
+
+
