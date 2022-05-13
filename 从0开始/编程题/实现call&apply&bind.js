@@ -20,7 +20,7 @@ Function.prototype.myBind = function(context, ...args) {
     const fn = this
     function Fn() {
         const bindArgs = [...args, ...arguments]
-        fn.apply(this instanceof Fn ? this : context, bindArgs)
+        return fn.call(this instanceof Fn ? this : context, ...bindArgs)
     }
     Fn.prototype = Object.create(fn.prototype)
     return Fn
@@ -42,6 +42,39 @@ wzf.say.myCall(txj, 180, 25)
 wzf.say.myApply(txj, [180, 25])
 const bindSay = wzf.say.myBind(txj, 199, 250)
 bindSay('male')
+
+
+
+
+
+
+
+
+Function.prototype.myBind = function(context, ...args) {
+      const fn = this
+      const Fn = function() {
+         const bindArgs = [...args, arguments]
+         return fn.call(this instanceof Fn ? this : context, ...bindArgs)
+      }
+      Fn.prototype = Object.create(fn.prototype)
+      return Fn
+}
+
+
+const wzf = {
+    name: 'wzf',
+    say: function(height = 0, age = 0, gender = 'female') {
+        return `${this.name} + ${height} + ${age} + ${gender}`;
+    }
+}
+
+const txj = {
+    name: 'txj'
+}
+  
+const boundSay = wzf.say.myBind(txj, 180, 25)
+console.log(boundSay());
+
 
 
 

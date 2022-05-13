@@ -95,3 +95,38 @@ const cloneA = deepClone(a)
 cloneA.b.c = 999
 
 console.log(a, cloneA);
+
+
+
+
+
+
+function deepClone(target, map = new Map()) {
+   if(typeof target !== 'object') return target
+   
+   const cloneTarget = Array.isArray(target)? [] : {} 
+   
+   if(!map.has(target)) {
+       map.set(target, cloneTarget) 
+   } else {
+       return map.get(target)
+   }
+    
+   if(target instanceof Date) {
+       return new Date(target)
+   }
+
+   if(target instanceof Function) {
+       const fn = function() {
+           return target.call(this)
+       }
+       fn.__proto__ = target.__proto__
+       return fn
+   }
+
+   for(let key in target) {
+       cloneTarget[key] = typeof target === 'object' ? deepClone(target[key], map) : target[key]
+   }
+    
+   return cloneTarget
+}

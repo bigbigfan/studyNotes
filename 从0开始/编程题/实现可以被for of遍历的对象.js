@@ -60,3 +60,15 @@ for(let i of obj) {
     console.log(i);
 }
 
+
+function ctor() {
+    this.name = 'wzf',
+    this.height = 178
+}
+ctor.prototype.gender = 'male'
+
+const a = new ctor()
+
+for(let i in a) {
+    console.log(i);
+}

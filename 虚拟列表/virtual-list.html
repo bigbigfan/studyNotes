@@ -64,6 +64,9 @@
         <div>
           {{test}}
         </div>
+        <div>
+          {{test2}}
+        </div>
         <button @click="changeByIndex">修改下标</button>
         <button @click="changeByPush">push</button>
      </div> 
@@ -79,7 +82,11 @@
           start: 0,
           end: null,
           startOffset: 0, // 偏移量
-          test: [1,2,3]
+          test: [1,2,3],
+          test2: {
+            a:1,
+            b:2
+          }
         }
       },
       computed: {
@@ -101,7 +108,7 @@
       },
       
       mounted() {
-        // console.log('test', this.visibleData)
+        console.log('test1', this.test)
           //  制造数据
           for(let i = 0; i < 5000; i++) {
             const obj = {
@@ -114,12 +121,12 @@
           this.start = 0
           this.end = this.start + this.visibleCount
       }, 
-      watch: {
-         test(val) {
-             console.log(val, val.__ob__.dep.subs[1],'watch');
+      // watch: {
+      //    test(val) {
+      //        console.log(val);
 
-         }
-      },
+      //    }
+      // },
       methods: {
         scrollEvent(e) {
           console.log(e);

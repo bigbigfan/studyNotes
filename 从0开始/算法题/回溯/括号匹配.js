@@ -141,3 +141,39 @@ function match(n) {
 }
 
 console.log(match(3));
+
+
+
+
+
+
+
+
+function pp(n) {
+   const res = []
+   const sum = n * 2
+   
+   function dfs(lRemain, rRemain, path) {
+     if(path.length == sum) {
+        res.push(path)
+        return 
+     }
+     
+     if(lRemain > 0) {
+        dfs(lRemain - 1, rRemain, path + '(')
+     }
+
+     if(rRemain > lRemain) {
+        dfs(lRemain, rRemain - 1, path + ')')
+     }
+
+   }
+   
+   dfs(n, n, '')
+   return res
+
+}
+
+console.log(pp(3));
+
+

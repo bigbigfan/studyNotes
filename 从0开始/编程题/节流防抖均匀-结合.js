@@ -57,6 +57,7 @@ function debounce(fn, delay) {
 
 
 
+
 // 节流
 
 function throttle(fn, delay) {
@@ -79,9 +80,6 @@ function throttle(fn, delay) {
 
 
 
-
-
-
 function throttle2(fn, delay) {
     let pre = Date.now()
     
@@ -95,4 +93,27 @@ function throttle2(fn, delay) {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+function debounce(fn, delay) {
+    let timer = null
+    
+    return (...args) => {
+      clearTimeout(timer)
+      timer = setTimeout(() => {
+         fn(...args)
+      }, delay)
+    }
+  
+}
 

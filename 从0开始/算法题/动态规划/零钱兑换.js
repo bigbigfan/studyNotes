@@ -41,56 +41,42 @@ const coinChange = function(coins, amount) {
  
 
 
-function coinChange2(coins, amount) {
-    const dp = new Array(amount + 1).fill(Infinity)
-    dp[0] = 0
-
-    for(let i = 0; i < dp.length; i++) {
-       for(let j = 0; j < coins.length; j++) {
-           if(i - coins[j] < 0) continue
-          dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1)   
-       }
-    }    
-    
-    return dp[amount] === Infinity ? -1 : dp[amount]
-}
-
-console.log(coinChange2([1,5,10], 11));
 
 
 
 
-function coinchange(coins, amount) {
-    const dp = new Array(amount + 1).fill(Infinity) 
-    dp[0] = 0
 
-    for(let i = 0; i < dp.length; i++) {
-       for(let j = 0; j < coins.length; j++) {
-         if(i - coins[j] < 0) continue
+
+
+
+function changeCoin(coins, amount) {
+   const dp = new Array(amount + 1).fill(Infinity)
+   dp[0] = 0
+   
+   for(let i = 0; i < dp.length; i++) {
+       for(let j = 0;j < coins.length; j++) {
+         if(i - coins[j] < 0) continue 
          dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1)
        }
-    }
-    
-    return dp[amount] === Infinity ? -1 : dp[amount]
+   }
+   return dp[amount] == Infinity ? -1 : dp[amount]
 }
 
-console.log(coinchange([1,5,10], 11));
+
+console.log(changeCoin([1,5,10], 12));
 
 
 
-
-
-const changeCoin = function (coins, amount) {
-     const dp = new Array(amount + 1).fill(Infinity)
-     dp[0] = 0
-     for(let i = 0; i < dp.length; i++) {
-          for(let j = 0; j <= coins.length - 1; j++) {
-                if(i - coins[j] < 0) continue
-                dp[i] = Math.min(dp[i], dp[i - coins[j]] + 1)
-          }
-     }
-     
-    return dp[amount] === Infinity ? -1 : dp[amount] 
+function change(coins, amount) {
+   const dp = new Array(amount + 1).fill(Infinity)
+   dp[0] = 0
+   
+   for(let i = 0; i < amount; i++) {
+     for(let j = 0; j < coins.length; j++) {
+          if(i - coins[j] < 0) continue
+          dp[i] = Math.min(dp[i],  dp[i - coins[j]] + 1)
+      }
+   }
+   
+   return dp[amount] == Infinity ? -1 : dp[amount]    
 }
-
-console.log(changeCoin([1,5,10], 11));

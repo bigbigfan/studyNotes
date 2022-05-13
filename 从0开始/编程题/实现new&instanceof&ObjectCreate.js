@@ -50,3 +50,20 @@ console.log(x, x.__proto__);
 
 
 
+
+
+
+function myNew(ctor, ...args) {
+    const obj = Object.create(ctor.prototype)
+    const temp = ctor.call(obj, ...args)
+    
+    return temp != null && (typeof temp === 'object' && typeof temp === 'function') ? temp : obj
+
+}
+
+
+Object.prototype.myCreate = function(obj) {
+     const Fn = function() {}
+     Fn.prototype = obj
+     return new Fn() 
+}

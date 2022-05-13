@@ -158,197 +158,138 @@ new MyPromise((resolve, reject) => {
 
 
 
-
-
-
-
-
 class MyPromise {
-   
     constructor(executor) {
         this.status = 'pending'
         this.value = undefined
-        this.reason = undefined
-     
-        this.fulfilledList = []
-        this.rejectList = []
-    
+        this.reason = undefined 
+        
+        this.resolveList = []
+        this.rejecteList = []
          
         const resolve = value => setTimeout(() => {
-            if(this.status !== 'pending') return 
+            if(this.status != 'pending') return 
             this.status = 'fulfilled'
             this.value = value
-            
-            while(this.fulfilledList.length) {
-                const cb = this.fulfilledList.shift()
+         
+            while(this.resolveList.length) {
+                let cb = this.resolveList.shift()
                 cb(value)
             }
-       });
+        })
         const reject = reason => setTimeout(() => {
-            if(this.status !== 'pending') return 
+            if(this.status != 'pending') return 
             this.status = 'rejected'
             this.reason = reason
-            
-            while(this.rejectList.length) {
-                const cb = this.rejectList.shift()
+         
+            while(this.rejecteList.length) {
+                let cb = this.rejecteList.shift()
                 cb(reason)
             }
-       });
+        })
 
-      
         executor(resolve, reject)
     }
-
-
+   
     then(resolveFn, rejectFn) {
-        // 值穿透 
-        typeof resolveFn !== 'function' ? resolveFn = value => value  : null
-        typeof rejectFn !== 'function' ? rejectFn = reason => {throw new Error(reason) } : null
+        typeof resolveFn != 'function' ?  resolveFn = value => value : null
+        typeof rejectFn != 'function' ? rejectFn = reason => { throw new Error(reason)} : null   
 
-     return new MyPromise((resolve, reject) => {
-        const fulfilledFn = value => {
-            try {
-               const res = resolveFn(value)         
-               res instanceof MyPromise?  res.then(resolve, reject): resolve(res)
-            } catch (error) {
-               reject(error)
+        return new MyPromise((resolve, reject) => {
+            const fulfilledFn = value => {
+                try {
+                    const res = resolveFn(value)
+                     res instanceof MyPromise ? res.then(resolve, reject) : resolve(res)
+                } catch (error) { 
+                    reject(error)
+                }
+            } 
+            const rejectedFn = reason => {
+                try {
+                    const res = rejectFn(reason)
+                     res instanceof MyPromise ? res.then(resolve, reject) : resolve(res)
+                } catch (error) { 
+                    reject(error)
+                }
+            } 
+           
+            switch(this.status) {
+               case 'pending': 
+                this.resolveList.push(fulfilledFn)
+                this.rejecteList.push(rejectedFn)
+               break
+               case 'fulfilled':  
+                fulfilledFn(this.value)
+               break
+               case 'rejected': 
+               rejectedFn(this.reason)
+               break
             }
-        }
-       
-        const rejectedFn = value => {
-            try {
-               const res = rejectFn(value)         
-               res instanceof MyPromise? res.then(resolve, reject): resolve(res)
-            } catch (error) {
-               reject(error)
-            }
-        }
-        
-
-        switch(this.status) {
-          case 'pending': 
-           this.fulfilledList.push(fulfilledFn)
-           this.rejectList.push(rejectedFn)
-          break
-          case 'fulfilled': 
-           fulfilledFn(this.value)
-          break
-          case 'rejected': 
-          rejectedFn(this.reason)    
-          break
-        }
-     }) 
+        })
     }
-    
+
     catch(rejectFn) {
-       return this.then(null, rejectFn)
+       return this.then(null,  rejectFn)
     }
 
     static resolve (value) {
         if(value instanceof MyPromise) return value
         return new MyPromise(resolve => resolve(value))
     }
-
+   
     static reject (reason) {
-       return new MyPromise((resolve, reject) => reject(reason))
+        return new MyPromise((resolve, reject) => reject(reason))
     }
-     
+
+
+
     finally(callback) {
        return this.then(
-         value => MyPromise.resolve(callback()).then(() => value), 
-         reason  => MyPromise.reject(callback()).then(() => {throw reason})
+           value => MyPromise.resolve(callback()).then(() => value),
+           reason => MyPromise.reject(callback()).then(() => {throw reason})
        )
     }
 
-    static all (promise) {
-       return new MyPromise((resolve, reject) => {
-          const l = promise.length
-          const resResult = []
-          let counter = 0
-          
-          promise.forEach((item, index) => {
+    static all(promises) {
+      return new MyPromise((resolve, reject) => {
+         const resResult = [] 
+         let counter = 0
+         const l = promises.length
+        
+         for(let i = 0; i < l; i++) {
+            MyPromise.resolve(promises[i]).then(res => {
+                resResult[i] = res
+                counter++
+                if(counter === l) {
+                    resolve(resResult)
+                }
+            }, err => reject(err))  
+         }
+      })
+    }
+
+    static race(promises) {
+      return new MyPromise((resolve, reject) => {
+          promises.forEach(item => {
               MyPromise.resolve(item).then(res => {
-                 resResult[index] = res 
-                 counter++
-                 if(l === counter) {
-                     resolve(resResult)
-                 }
-              })
-              .catch(err => reject(err))
+                  resolve(res)
+              }, err => reject(err))
           })
-       })
-    }
-
-    static race (promises) {
-        return new MyPromise((resolve, reject) => {
-            promises.forEach(item => {
-               MyPromise.resolve(item).then(res => {
-                   resolve(res)
-               })
-               .catch(err => {
-                   reject(err)
-               })
-            })
-        })
-    }
-
-    static allSettled(promises) {
-        return new MyPromise((resolve, reject) => {
-            const l = promises.length
-            const resResult = []
-            let counter = 0
-            promises.forEach((item, index) => {
-               MyPromise.resolve(item).then(value => {
-                   resResult[index] = {
-                    status: 'fulfilled',
-                    value
-                  }
-               })
-               .catch(reason => {
-                resResult[index] = {
-                    status: 'rejected',
-                    reason
-                  }
-               })
-               .finally(() => {
-                 counter++
-                 if(counter === l) resolve(resResult)    
-               }) 
-            })
-        })
+      })
     }
 
 }
 
+const p = (val) => new MyPromise((resolve, reject) => {
+    setTimeout(() => {
+        resolve(val)
+    }, val * 1000)
+})
 
-new MyPromise((resolve, reject) => {
-    reject(1)
-})
-// MyPromise.reject(1)
-.then(res => {
-    console.log(res, 'then1');
-    return 2
-})
-.then(res => {
-     console.log(res, 'then2');
-})
-.catch(err => {
-    console.log(err);
-})
-.finally(() => {
-    console.log('finally');
+MyPromise.all([p(3), p(1), p(2)]).then(res => {
+    console.log(res, 'is my res');
 })
 
 
 
-const p = (value, time) => new MyPromise(resolve => {
-   setTimeout(() => {
-       resolve(value)
-   }, time);
-})
 
-const rej = () => new MyPromise((resolve, reject) => reject(4))
-
-// MyPromise.allSettled([p(2,2000), p(1, 1000), p(3, 3000), rej]).then(res => {
-//     console.log(res);
-// })

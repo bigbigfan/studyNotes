@@ -37,33 +37,3 @@
 // fetchWithLimit([p(1,1000), p(2,2000), p(3, 3000), p(4, 4000)], 2).then(res => {
 //     console.log('then',res);
 // })
-
-
-
-function fetchWithLimit(promises, limit) {
-   return new Promise(resolve => {
-     let count = 0, curIndex = 0, finishIndex = 0
-
-     function run () {
-        if(finishIndex >= promises.length) { // 完成索引大于长度 直接结束
-            return resolve('finish!')
-        }
-        //  未超过限制数时 持续抓取任务执行
-        while (count < limit && curIndex < promises.length) {
-          promises[curIndex]().finally(() => { //进到这说明该任务做完了
-              finishIndex += 1 // 记录完成的索引
-              count -= 1  // 消除一个当前的任务数
-              run() //递归
-          })
-          count += 1
-          curIndex += 1
-        }  
-     }
-   
-     run()
-
-   })
-   
-
-   
-}

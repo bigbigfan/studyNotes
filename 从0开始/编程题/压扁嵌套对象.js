@@ -45,3 +45,8 @@ const ins = {
 }
 
 console.log(flatObj2(ins));
+
+
+
+
+
