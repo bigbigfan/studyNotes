@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style> 
+  * {
+      margin: 0;
+      padding: 0;
+      /* box-sizing: border-box; */
+  }
+  .parent {
+      /*  relative会在文档流中占据位置 */
+      position: relative; 
+      left: 1000px;
+      top: 300px;
+      height: 200px;
+      width: 200px;
+      background-color: black;
+      color: white;
+  }
+  .box {
+      /* 盒模型会影响offsetWidth的计算，因为涉及到了border的划分 */
+      /* box-sizing: border-box; */   
+      border: 1px solid red;
+      position: absolute;
+      left: 50px;
+      /* top: 300px; */
+      width: 100px;
+      height: 100px;
+      background-color: green;
+      color: #000;
+  }
+
+  .p {
+      width: 300px;
+      height: 300px;
+      background-color: blue;
+      margin-left: 50px;
+  }
+  .c {
+      width: 100px;
+      height: 100px;
+      background-color: yellow;
+      margin-left: 10px;
+  }
+
+</style>
+<body>
+    <div class="parent">
+        <!-- a parent box -->
+        <div class="box">a visible box</div>
+    </div>
+
+
+    <div class="p">
+        <div class="c"></div>
+    </div>
+    
+</body>
+<script>
+    const box = document.querySelector('.box')
+    
+    console.log(box.clientLeft, 'clientLeft 该元素对象的左边框宽度');
+    console.log(box.clientWidth, 'clientWidth 该元素对象的左内边框至右内边框的宽度');
+
+    console.log(box.offsetLeft, 'offsetLeft 该元素左外边框至左边界的距离');
+    console.log(box.offsetWidth, 'offsetWidth 该元素左外边框至右外边框的距离');
+    
+    box.addEventListener('click', function(e) {
+        console.log(e.offsetX, 'offsetX 事件触发时鼠标指针相对触发标签元素的左内边框水平坐标');
+        console.log(e.clientX, 'clientX 事件触发时鼠标指针相对于窗口左边界的水平坐标');
+
+    })
+    // const pos = box.getBoundingClientRect(box)
+    // console.log(pos);
+
+
+
+    const c = document.querySelector('.c')
+    console.log(c.offsetLeft, 'c的offsetLeft');
+
+</script>
+</html>

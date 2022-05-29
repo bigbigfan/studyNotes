@@ -14,6 +14,6 @@ var strStr = function(haystack, needle) {
     return result
 };
 
-const x = strStr('abc', 'ab')
+const x = strStr('abc', 'c')
 console.log(x);
 // strStr('abc', 'ab')

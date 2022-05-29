@@ -20,3 +20,21 @@ c.say()
 
 
 // 原型链继承就是把父构造函数的实例作为子构造函数的原型对象，调用构造函数生成实例
+
+
+
+function Parent() {
+    this.name = 'parent'
+}
+
+Parent.prototype.say = function() {
+    console.log(this.name);
+}
+
+
+function Children() {
+     Parent.call(this)     
+}
+
+Children.prototype = Object.create(Parent.prototype)
+Children.prototype.constructor = Children
