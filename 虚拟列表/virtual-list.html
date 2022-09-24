@@ -7,6 +7,8 @@
   <title>Document</title>
 </head>
 <script src="../vue/vue.js"></script>
+  <!-- 引入样式 -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
 <style>
   * {
    padding: 0;
@@ -43,39 +45,43 @@
 }
 </style>
 <body>
-     <div id='app'>
-        <!-- 固定容器 -->
-        <div ref="list" class="infinite-list-container" @scroll="scrollEvent($event)">
-               <!-- 撑开高度的盒子，需要动态计算高度 -->
-              <div class="infinite-list-phantom" :style="{height: listHeight + 'px'}">
-              </div>
-              <!-- 渲染列表，需要计算动态偏移量 -->
-              <div class="inifinite-list" :style ="{transform: getTransform}">
-                 <div ref="items"
-                 class="infinite-list-item"
-                 v-for="item in visibleData"
-                 :key="item.id"
-                 :style = "{height: itemSize + 'px',lineHeight: itemSize + 'px'}"
-                 >
-                 {{item.value}}
-                 </div>
-              </div>
-        </div>
-        <div>
-          {{test}}
-        </div>
-        <div>
-          {{test2}}
-        </div>
-        <button @click="changeByIndex">修改下标</button>
-        <button @click="changeByPush">push</button>
-     </div> 
+    <div id="app">
+      <el-select v-model="value" placeholder="请选择" multiple  
+      filterable >
+        <el-option
+        
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value">
+        </el-option>
+      </el-select>
+    </div>
 </body>
+<!-- 引入组件库 -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
 <script>
     const app = new Vue({
       el: "#app",
       data() {
         return {
+          options: [{
+          value: '选项1',
+          label: '黄金糕'
+        }, {
+          value: '选项2',
+          label: '双皮奶'
+        }, {
+          value: '选项3',
+          label: '蚵仔煎'
+        }, {
+          value: '选项4',
+          label: '龙须面'
+        }, {
+          value: '选项5',
+          label: '北京烤鸭'
+        }],
+        value: [],
           itemSize: 100, // 固定的列表项高度
           screenHeight: 1000, // 固定的视图区域高度
           listData: [], // 总条目

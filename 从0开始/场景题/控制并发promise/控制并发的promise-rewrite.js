@@ -1,5 +1,6 @@
-// const fetchWithLimit = (promises, limit) =>
-//   new Promise((resolve) => {
+// const fetchWithLimit = (promises, limit) => {
+//    console.log(promises);
+//   return new Promise((resolve) => {
 //     // curIndex 是当前开始执行任务索引 finishIndex当前完成任务索引 curCount 是当前处理任务数
 //     let curIndex = 0,
 //       finishIndex = 0,
@@ -27,6 +28,8 @@
 
 //     run();
 // });
+// }
+  
 // const startTime = new Date().getTime()
 
 // const p = (value, time) => () => new Promise(resolve => setTimeout(() => {
@@ -37,3 +40,18 @@
 // fetchWithLimit([p(1,1000), p(2,2000), p(3, 3000), p(4, 4000)], 2).then(res => {
 //     console.log('then',res);
 // })
+
+
+
+const arr = [{a:1}, {a:2}, {a:3}, {a: 2}]
+
+
+for(let i = 0 ; i < arr.length; i++) {
+  console.log(arr);
+     if(arr[i].a === 2) {
+     
+      arr.splice(i, 1)
+     }
+}
+
+console.log(arr);
